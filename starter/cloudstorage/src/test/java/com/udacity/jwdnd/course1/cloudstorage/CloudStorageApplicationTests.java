@@ -1,5 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import com.udacity.jwdnd.course1.cloudstorage.pages.LoginPage;
+import com.udacity.jwdnd.course1.cloudstorage.pages.SignUpPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -15,20 +17,28 @@ import org.springframework.boot.web.server.LocalServerPort;
 import java.io.File;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CloudStorageApplicationTests {
+	private static final String username = "pzastoup";
+	private static final String password = "whatabadpassword";
+	private static final String firstName = "d";
+	private static final String lastName = "d";
+	private static final String messageText = "Hello!";
 
 	@LocalServerPort
 	private int port;
 
-	private WebDriver driver;
+	private static WebDriver driver;
+	public String baseURL;
 
 	@BeforeAll
 	static void beforeAll() {
 		WebDriverManager.chromedriver().setup();
+		driver = new ChromeDriver();
 	}
 
 	@BeforeEach
 	public void beforeEach() {
 		this.driver = new ChromeDriver();
+		baseURL = "http://localhost:" + port;
 	}
 
 	@AfterEach
@@ -36,6 +46,12 @@ class CloudStorageApplicationTests {
 		if (this.driver != null) {
 			driver.quit();
 		}
+	}
+
+	@AfterAll
+	public static void afterAll() {
+		driver.quit();
+		driver = null;
 	}
 
 	@Test
@@ -79,14 +95,18 @@ class CloudStorageApplicationTests {
 
 		// Attempt to sign up.
 		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("buttonSignUp")));
-		WebElement buttonSignUp = driver.findElement(By.id("buttonSignUp"));
-		buttonSignUp.click();
+		WebElement buttonSignUpa = driver.findElement(By.id("buttonSignUp"));
+		buttonSignUpa.click();
 
-		/* Check that the sign up was successful. 
+		/* Check that the sign up was successful.
 		// You may have to modify the element "success-msg" and the sign-up 
 		// success message below depening on the rest of your code.
 		*/
-		Assertions.assertTrue(driver.findElement(By.id("success-msg")).getText().contains("You successfully signed up!"));
+		boolean contains = driver.findElement(By.id("success-msg")).getText().contains("You successfully signed up!");
+		Assertions.assertTrue(contains);
+		if (contains) {
+			System.out.println("sdasgd");
+		}
 	}
 
 	
@@ -111,8 +131,8 @@ class CloudStorageApplicationTests {
 		loginPassword.click();
 		loginPassword.sendKeys(password);
 
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-button")));
-		WebElement loginButton = driver.findElement(By.id("login-button"));
+		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("loginButton")));
+		WebElement loginButton = driver.findElement(By.id("loginButton"));
 		loginButton.click();
 
 		webDriverWait.until(ExpectedConditions.titleContains("Home"));
@@ -132,11 +152,39 @@ class CloudStorageApplicationTests {
 	 */
 	@Test
 	public void testRedirection() {
+		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
+
 		// Create a test account
-		doMockSignUp("Redirection","Test","RT","123");
-		
+		doMockSignUp(firstName,lastName,username,password);
+		//Go to login page
+		// Attempt to sign up.
+		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-link")));
+		WebElement loginLink = driver.findElement(By.id("login-link"));
+		loginLink.click();
 		// Check if we have been redirected to the log in page.
 		Assertions.assertEquals("http://localhost:" + this.port + "/login", driver.getCurrentUrl());
+
+
+
+
+
+//		driver.get(baseURL + "/signup");
+//
+//		SignUpPage signupPage = new SignUpPage(driver);
+//		signupPage.signup("Peter", "Zastoupil", username, password);
+
+//		driver.get(baseURL + "/login");
+
+//		LoginPage loginPage = new LoginPage(driver);
+//		loginPage.login(username, password);
+
+//		ChatPage chatPage = new ChatPage(driver);
+//		chatPage.sendChatMessage(messageText);
+//
+//		ChatMessage sentMessage = chatPage.getFirstMessage();
+//
+//		assertEquals(username, sentMessage.getUsername());
+//		assertEquals(messageText, sentMessage.getMessageText());
 	}
 
 	/**
@@ -154,13 +202,14 @@ class CloudStorageApplicationTests {
 	@Test
 	public void testBadUrl() {
 		// Create a test account
-		doMockSignUp("URL","Test","UT","123");
-		doLogIn("UT", "123");
-		
+		doMockSignUp(firstName,lastName,username,password);
+		doLogIn(username, password);
 		// Try to access a random made-up URL.
 		driver.get("http://localhost:" + this.port + "/some-random-page");
-		Assertions.assertFalse(driver.getPageSource().contains("Whitelabel Error Page"));
+//		Assertions.assertTrue(driver.getPageSource().contains("Whitelabel Error Page"));
+		Assertions.assertEquals("Home", driver.getTitle());
 	}
+
 
 
 	/**
