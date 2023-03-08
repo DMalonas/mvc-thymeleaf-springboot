@@ -9,18 +9,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class File {
     private Long fileId;
-    private String filename;
+    private String fileName;
     private String contentType;
     private String fileSize;
     private Long userId;
     private byte[] fileData;
 
     public File(String fileName, String contentType, String fileSize, long userId, byte[] fileData) {
-        fileName = fileName;
-        contentType = contentType;
-        fileSize = fileSize;
-        userId = userId;
-        fileData = fileData;
+        this.fileName = fileName;
+        this.contentType = contentType;
+        this.fileSize = fileSize;
+        this.userId = userId;
+        this.fileData = fileData;
     }
 }
 
