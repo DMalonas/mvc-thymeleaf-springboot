@@ -22,7 +22,7 @@ public interface FileMapper {
     List<File> findFilesByFileName(String fileName);
 
     @Select("SELECT * FROM FILES WHERE userId = #{userId}")
-    List<File> findFilesByUserId(Long userId);
+    List<File> findFilesByUserId(Integer userId);
 
     @Select("SELECT fileName FROM FILES WHERE userid = #{userId}")
     List<String> getFilesByUserId(Integer userId);
@@ -33,8 +33,24 @@ public interface FileMapper {
     @Select("SELECT * FROM FILES")
     List<File> getFiles();
 
-    @Delete("DELETE FROM FILES WHERE fileId = #{fileId}")
-    void deleteFileById(Long fileId);
+    @Delete("DELETE FROM FILES WHERE fileName = #{fileName}")
+    int deleteFileById(Long fileId);
+
+
+    @Select("SELECT COUNT(*) FROM FILES WHERE fileName = #{fileName}")
+    int selectCountByFileName(String fileName);
+
+    @Delete("DELETE FROM FILES WHERE fileName = #{fileName}")
+    int deleteFileByFileName(String fileName);
+
+    default int deleteEntrySafely(String fileName) {
+        int count = selectCountByFileName(fileName);
+        if (count > 0) {
+            return deleteFileByFileName(fileName);
+        } else {
+            return 0;
+        }
+    }
 
 }
 

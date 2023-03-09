@@ -18,16 +18,18 @@ public class FileService {
     private final FileMapper fileMapper;
     private final UserMapper userMapper;
 
-    public FileService(FileMapper fileMapper, UserMapper userMapper) {
+    private final UtilService utilService;
+
+
+    public FileService(FileMapper fileMapper, UserMapper userMapper, UtilService utilService) {
         this.fileMapper = fileMapper;
         this.userMapper = userMapper;
+        this.utilService = utilService;
     }
 
 
-    public int addFile(Authentication authentication, MultipartFile multipartFile, Model model) throws IOException {
-        String userName = authentication.getName();
-        User user = userMapper.getUser(userName);
-        Integer userId = user.getUserId();
+    public int addFile(MultipartFile multipartFile, Model model) throws IOException {
+        Integer userId = utilService.getUserId();
         String fileName = multipartFile.getOriginalFilename();
         if (!fileIsDuplicate(userId, fileName)) {
             try {
@@ -37,18 +39,17 @@ public class FileService {
                 File file = new File(fileName, contentType, fileSize, (long)userId, fileData);
                 int id = fileMapper.insertFile(file);
                 model.addAttribute("files", fileMapper.getFilesByUserId(userId).toArray(new String[0]));
-                model.addAttribute("result", "success");
-
                 return id;
             } catch (IOException e) {
                 e.printStackTrace();
-                model.addAttribute("result", "error");
-                model.addAttribute("message", "Exception occurred while trying to save file.");
+                model.addAttribute("error", "Exception occurred while trying to save file.");
+                model.addAttribute("files", fileMapper.getFilesByUserId(userId).toArray(new String[0]));
+
                 return -1;
             }
         }
-        model.addAttribute("result", "error");
-        model.addAttribute("message", "You have tried to add a duplicate file.");
+        model.addAttribute("error", "You have tried to add a duplicate file.");
+        model.addAttribute("files", fileMapper.getFilesByUserId(userId).toArray(new String[0]));
         return -1;
     }
 
@@ -64,6 +65,12 @@ public class FileService {
 
     public List<String> getFilesByUserId(Integer userId) {
         return fileMapper.getFilesByUserId(userId);
+    }
+
+    public void deleteFile(String fileName, Model model) {
+        Integer userId = utilService.getUserId();
+        fileMapper.deleteEntrySafely(fileName);
+        model.addAttribute("files", fileMapper.getFilesByUserId(userId).toArray(new String[0]));
     }
 
 
