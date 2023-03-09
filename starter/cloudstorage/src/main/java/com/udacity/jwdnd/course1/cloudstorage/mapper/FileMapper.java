@@ -29,6 +29,7 @@ public interface FileMapper {
 
     @Select("SELECT * FROM FILES WHERE fileName = #{fileName}")
     File getFileByName(String fileName);
+
     @Select("SELECT * FROM FILES")
     List<File> getFiles();
 

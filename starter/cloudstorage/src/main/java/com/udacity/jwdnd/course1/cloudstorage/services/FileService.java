@@ -36,7 +36,7 @@ public class FileService {
                 String fileSize = String.valueOf(multipartFile.getSize());
                 File file = new File(fileName, contentType, fileSize, (long)userId, fileData);
                 int id = fileMapper.insertFile(file);
-                model.addAttribute("files", fileMapper.getFiles());
+                model.addAttribute("files", fileMapper.getFilesByUserId(userId).toArray(new String[0]));
                 model.addAttribute("result", "success");
 
                 return id;
