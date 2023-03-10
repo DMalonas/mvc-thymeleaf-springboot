@@ -10,4 +10,10 @@ public class Note {
     private String noteTitle;
     private String noteDescription;
     private Integer userId;
+
+    public Note(String title, String description, Integer userId) {
+        this.noteTitle = title;
+        this.noteDescription = description;
+        this.userId = userId;
+    }
 }

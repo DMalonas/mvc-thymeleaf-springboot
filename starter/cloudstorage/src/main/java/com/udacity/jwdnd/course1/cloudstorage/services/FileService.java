@@ -38,18 +38,17 @@ public class FileService {
                 String fileSize = String.valueOf(multipartFile.getSize());
                 File file = new File(fileName, contentType, fileSize, (long)userId, fileData);
                 int id = fileMapper.insertFile(file);
-                model.addAttribute("files", fileMapper.getFilesByUserId(userId).toArray(new String[0]));
+                utilService.updateModel(model);
                 return id;
             } catch (IOException e) {
                 e.printStackTrace();
                 model.addAttribute("error", "Exception occurred while trying to save file.");
-                model.addAttribute("files", fileMapper.getFilesByUserId(userId).toArray(new String[0]));
-
+                utilService.updateModel(model);
                 return -1;
             }
         }
         model.addAttribute("error", "You have tried to add a duplicate file.");
-        model.addAttribute("files", fileMapper.getFilesByUserId(userId).toArray(new String[0]));
+        utilService.updateModel(model);
         return -1;
     }
 
@@ -70,33 +69,8 @@ public class FileService {
     public void deleteFile(String fileName, Model model) {
         Integer userId = utilService.getUserId();
         fileMapper.deleteEntrySafely(fileName);
-        model.addAttribute("files", fileMapper.getFilesByUserId(userId).toArray(new String[0]));
+        utilService.updateModel(model);
     }
-
-
-//    public void addFile(MultipartFile multipartFile) throws IOException {
-//
-//
-//
-//        InputStream fis = multipartFile.getInputStream();
-//        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-//        int nRead;
-//        byte[] data = new byte[1024];
-//        while ((nRead = fis.read(data, 0, data.length)) != -1) {
-//            buffer.write(data, 0, nRead);
-//        }
-//        buffer.flush();
-//        byte[] fileData = buffer.toByteArray();
-//
-//        String fileName = multipartFile.getOriginalFilename();
-//        String contentType = multipartFile.getContentType();
-//        String fileSize = String.valueOf(multipartFile.getSize());
-//        User user = userMapper.getUser(userName);
-//        Integer userId = user.getUserId();
-//        File file = new File(fileName, contentType, fileSize, (long)userId, fileData);
-//        fileMapper.insertFile(file);
-//    }
-
 }
 
 

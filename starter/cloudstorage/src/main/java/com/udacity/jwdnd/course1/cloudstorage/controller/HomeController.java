@@ -3,7 +3,6 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.UserMapper;
-import com.udacity.jwdnd.course1.cloudstorage.persistence.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.UtilService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,12 +30,12 @@ public class HomeController {
     @GetMapping
     public String getHomePage(Model model) {
         try {
-            Integer userId = utilService.getUserId();
-            model.addAttribute("files", fileMapper.getFilesByUserId(userId).toArray(new String[0]));
+            utilService.updateModel(model);
             return "home";
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return "login";
     }
 

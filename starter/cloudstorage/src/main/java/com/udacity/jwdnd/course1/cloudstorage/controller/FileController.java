@@ -3,9 +3,9 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import com.udacity.jwdnd.course1.cloudstorage.services.UtilService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +21,14 @@ public class FileController {
 
     private UserService userService;
 
+    private final UtilService utilService;
     private FileService fileService;
 
     @Autowired
-    public FileController(FileMapper fileMapper, UserService userService, FileService fileService) {
+    public FileController(FileMapper fileMapper, UserService userService, UtilService utilService, FileService fileService) {
         this.fileMapper = fileMapper;
         this.userService = userService;
+        this.utilService = utilService;
         this.fileService = fileService;
     }
 
@@ -39,6 +41,7 @@ public class FileController {
     public String handleFileUpload(@RequestParam("fileUpload") MultipartFile file,
                                    Model model) throws IOException {
         fileService.addFile(file, model);
+        utilService.updateModel(model);
         return "home";
     }
 
@@ -58,6 +61,7 @@ public class FileController {
     @GetMapping(value = "/delete/{fileName}")
     public String deleteFile(@PathVariable String fileName, Model model) {
         fileService.deleteFile(fileName, model);
+        utilService.updateModel(model);
         return "home";
     }
 
