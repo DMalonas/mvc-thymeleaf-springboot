@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NoteForm {
-    private String noteId;
-    private String title;
-    private String description;
+public class CredentialsForm {
+    private String url;
+    private String userName;
+    private String credentialId;
+    private String password;
 }

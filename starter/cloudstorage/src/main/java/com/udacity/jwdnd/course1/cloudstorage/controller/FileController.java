@@ -1,6 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
+import com.udacity.jwdnd.course1.cloudstorage.persistence.CredentialsForm;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UtilService;
@@ -38,7 +39,7 @@ public class FileController {
     }
 
     @PostMapping("/upload")
-    public String handleFileUpload(@RequestParam("fileUpload") MultipartFile file,
+    public String handleFileUpload(@ModelAttribute("newCredential") CredentialsForm newCredential,@RequestParam("fileUpload") MultipartFile file,
                                    Model model) throws IOException {
         fileService.addFile(file, model);
         utilService.updateModel(model);
@@ -53,13 +54,13 @@ public class FileController {
                     MediaType.IMAGE_GIF_VALUE,
                     MediaType.APPLICATION_OCTET_STREAM_VALUE})
     public @ResponseBody
-    byte[] getFile(@PathVariable String fileName) {
+    byte[] getFile(@ModelAttribute("newCredential") CredentialsForm newCredential, @PathVariable String fileName) {
         return fileMapper.getFileByName(fileName).getFileData();
     }
 
 
     @GetMapping(value = "/delete/{fileName}")
-    public String deleteFile(@PathVariable String fileName, Model model) {
+    public String deleteFile(@ModelAttribute("newCredential") CredentialsForm newCredential,@PathVariable String fileName, Model model) {
         fileService.deleteFile(fileName, model);
         utilService.updateModel(model);
         return "home";

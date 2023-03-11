@@ -21,7 +21,7 @@ public class NoteController {
     }
 
     @GetMapping
-    public String getHomePage(Model model) {
+    public String getHomePage(@ModelAttribute("newCredential") CredentialsForm newCredential,Model model) {
         utilService.updateModel(model);
         return "home";
     }
@@ -29,7 +29,7 @@ public class NoteController {
 
 
     @PostMapping
-    public String addNote(@ModelAttribute("note") NoteForm noteForm, Model model) {
+    public String addNote(@ModelAttribute("newCredential") CredentialsForm newCredential,@ModelAttribute("note") NoteForm noteForm, Model model) {
         if (noteForm.getNoteId().isBlank()) {
             noteService.addNote(noteForm.getTitle(), noteForm.getDescription());
         } else {
@@ -40,10 +40,10 @@ public class NoteController {
     }
 
 
-    @GetMapping(value = "/delete/{id}")
-    public String delete(@PathVariable Integer id,
+    @GetMapping(value = "/delete/{noteId}")
+    public String delete(@ModelAttribute("newCredential") CredentialsForm newCredential,@PathVariable String noteId,
             Model model) {
-        noteService.deleteNote(id);
+        noteService.deleteNote(Integer.parseInt(noteId));
         utilService.updateModel(model);
         return "home";
     }
