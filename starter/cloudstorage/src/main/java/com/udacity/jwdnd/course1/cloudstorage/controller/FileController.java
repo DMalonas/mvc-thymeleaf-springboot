@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -39,12 +40,20 @@ public class FileController {
     }
 
     @PostMapping("/upload")
-    public String handleFileUpload(@ModelAttribute("newCredential") CredentialsForm newCredential,@RequestParam("fileUpload") MultipartFile file,
+    public String handleFileUpload(@ModelAttribute("newCredential") CredentialsForm newCredential, @RequestParam("fileUpload") MultipartFile file,
                                    Model model) throws IOException {
-        fileService.addFile(file, model);
-        utilService.updateModel(model);
-        return "home";
+        try {
+            fileService.addFile(file, model);
+            utilService.updateModel(model);
+            return "home";
+        } catch (MaxUploadSizeExceededException e) {
+            e.printStackTrace();
+            model.addAttribute("error", "File size limit exceeded.");
+            utilService.updateModel(model);
+            return "home";
+        }
     }
+
 
     @GetMapping(value = "/{fileName}",
             produces = {MediaType.APPLICATION_PDF_VALUE,

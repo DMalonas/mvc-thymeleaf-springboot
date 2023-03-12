@@ -95,8 +95,8 @@ class CloudStorageApplicationTests {
 
 		// Attempt to sign up.
 		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("buttonSignUp")));
-		WebElement buttonSignUpa = driver.findElement(By.id("buttonSignUp"));
-		buttonSignUpa.click();
+		WebElement buttonSignUp = driver.findElement(By.id("buttonSignUp"));
+		buttonSignUp.click();
 
 		/* Check that the sign up was successful.
 		// You may have to modify the element "success-msg" and the sign-up 

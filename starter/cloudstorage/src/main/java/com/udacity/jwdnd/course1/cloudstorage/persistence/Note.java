@@ -16,4 +16,9 @@ public class Note {
         this.noteDescription = description;
         this.userId = userId;
     }
+
+    public Note(String title, String description) {
+        this.noteTitle = title;
+        this.noteDescription = description;
+    }
 }
