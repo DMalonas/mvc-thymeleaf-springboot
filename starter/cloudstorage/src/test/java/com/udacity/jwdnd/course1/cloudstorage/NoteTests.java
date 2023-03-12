@@ -15,7 +15,7 @@ import org.springframework.boot.web.server.LocalServerPort;
  * Tests for Note Creation, Viewing, Editing, and Deletion.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class NoteTests extends CloudStorageApplicationTests {
+class NoteTests   {
 
 	private static final String LOCALHOST = "http://localhost:";
 	private static final String LOGIN = "/login";

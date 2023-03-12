@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/home")
 public class HomeController {
 
     FileMapper fileMapper;
@@ -29,7 +28,7 @@ public class HomeController {
         this.utilService = utilService;
     }
 
-    @GetMapping
+    @GetMapping("/home")
     public String getHomePage(Model model) {
         try {
             boolean notLoggedInYet = utilService.getUserId() == -1;
@@ -47,7 +46,7 @@ public class HomeController {
 
 
 
-    @PostMapping()
+    @PostMapping("/home")
     public String addMessage(@ModelAttribute("newCredential") CredentialsForm newCredential) {
         return "home";
     }
