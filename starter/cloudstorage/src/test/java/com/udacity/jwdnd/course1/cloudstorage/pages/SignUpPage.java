@@ -1,12 +1,13 @@
 package com.udacity.jwdnd.course1.cloudstorage.pages;
 
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class SignUpPage {
+
+    private final WebDriver driver;
     @FindBy(id = "inputFirstName")
     private WebElement inputFirstName;
 
@@ -19,19 +20,27 @@ public class SignUpPage {
     @FindBy(id = "inputPassword")
     private WebElement inputPassword;
 
-    @FindBy(id = "submit-button")
-    private WebElement submitButton;
 
 
-    public SignUpPage(WebDriver webDriver) {
+
+    @FindBy(id = "buttonSignUp")
+    private WebElement buttonSignUp;
+
+    @FindBy(id = "signUpToLoginPage")
+    private WebElement signUpToLoginPage;
+
+    public SignUpPage( WebDriver webDriver) {
         PageFactory.initElements(webDriver, this);
+        this.driver = webDriver;
     }
 
-    public void signup(String firstName, String lastName, String username, String password) {
+    public void signupAndGoToLogin(String firstName, String lastName, String username, String password) {
         this.inputFirstName.sendKeys(firstName);
         this.inputLastName.sendKeys(lastName);
         this.inputUserName.sendKeys(username);
         this.inputPassword.sendKeys(password);
-        this.submitButton.click();
+        this.buttonSignUp.click();
+        this.signUpToLoginPage.click();
     }
+
 }

@@ -12,8 +12,11 @@ public class LoginPage {
     @FindBy(css="#inputPassword")
     private WebElement inputPassword;
 
-    @FindBy(css="loginButton")
+
+
+    @FindBy(id = "loginButton")
     private WebElement loginButton;
+
 
     public LoginPage(WebDriver webDriver) {
         PageFactory.initElements(webDriver, this);
