@@ -10,6 +10,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import static com.udacity.jwdnd.course1.cloudstorage.util.UtilTests.*;
+import static com.udacity.jwdnd.course1.cloudstorage.util.UtilTests.getHomePage;
 
 /**
  * Tests for Note Creation, Viewing, Editing, and Deletion.
@@ -17,22 +19,13 @@ import org.springframework.boot.web.server.LocalServerPort;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class NoteTests   {
 
-	private static final String LOCALHOST = "http://localhost:";
-	private static final String LOGIN = "/login";
-	private static final String SIGNUP= "/signup";
-	private static final String HOME = "/home";
+	private final static String NOTE_TITLE = "My Note";
+	private final static String NOTE_DESCRIPTION = "This is my note.";
 
-	private static final String NOTE = "/note";
-
-	private static final String USERNAME = "jSmith";
-	private static final String PASSWORD = "1234";
 	@LocalServerPort
 	private int port;
-
 	private static WebDriver driver;
-
 	public String baseURL;
-
 	@BeforeAll
 	static void beforeAll() {
 		WebDriverManager.chromedriver().setup();
@@ -50,64 +43,48 @@ class NoteTests   {
 		baseURL = LOCALHOST + port;
 	}
 
-	/**
-	 * Test that edits an existing note and verifies that the changes are displayed.
-	 */
-//	@Test
-//	public void testDelete() {
-//		String noteTitle = "My Note";
-//		String noteDescription = "This is my note.";
-//		HomePage homePage = signUpAndLogin();
-//		createNote(noteTitle, noteDescription, homePage);
-//		homePage.navToNotesTab();
-//		homePage = new HomePage(driver);
-//		Assertions.assertFalse(homePage.noNotes(driver));
-//		deleteNote(homePage);
-//		Assertions.assertTrue(homePage.noNotes(driver));
-//	}
 
-	private void deleteNote(HomePage homePage) {
+	private void deleteNote(HomePage homePage) throws Exception {
 		homePage.deleteNote(driver);
 	}
 
+	//Write a test that deletes a note and verifies that the note is no longer displayed.
+	@Test
+	public void testDelete() {
+		HomePage homePage = goToHomePageAndCreateNote();
+		createNote(NOTE_TITLE, NOTE_DESCRIPTION);
+		Assertions.assertFalse(homePage.noNotes(driver));
+		while (true) {
+			try {
+				homePage.goToNavNotesTab(driver);
+				deleteNote(homePage);
+			} catch (Exception e) {
+				System.out.println("s0s0s");
+				break;
+			}
+		}
+
+		Assertions.assertTrue(homePage.noNotes(driver));
+	}
 
 	//Write a test that creates a note, and verifies it is displayed.
 	@Test
 	public void testCreateAndDisplay() {
-		String noteTitle = "My Note";
-		String noteDescription = "This is my note.";
-		driver.get(LOCALHOST + this.port + "/signup");
-		Assertions.assertEquals(baseURL + SIGNUP, driver.getCurrentUrl());
-		SignUpPage signupPage = new SignUpPage(driver);
-		signupPage.signupAndGoToLogin(USERNAME, PASSWORD, USERNAME, PASSWORD);
-		driver.get(baseURL + LOGIN);
-		Assertions.assertEquals(baseURL + LOGIN, driver.getCurrentUrl());
-		LoginPage loginPage = new LoginPage(driver);
-		loginPage.login(USERNAME, PASSWORD);
-		createNote(noteTitle, noteDescription);
-		HomePage homePage = new HomePage(driver);
+		HomePage homePage = goToHomePageAndCreateNote();
 		homePage.goToNavNotesTab(driver);
 		Note note = homePage.getFirstNote();
-		Assertions.assertEquals(noteTitle, note.getNoteTitle());
-		Assertions.assertEquals(noteDescription, note.getNoteDescription());
+		Assertions.assertEquals(NOTE_TITLE, note.getNoteTitle());
+		Assertions.assertEquals(NOTE_DESCRIPTION, note.getNoteDescription());
 		homePage.logout();
 	}
 
 	//Write a test that edits an existing note and verifies that the changes are displayed.
 	@Test
 	public void testModify() {
-		String noteTitle = "My Note";
-		String noteDescription = "This is my note.";
-		driver.get(LOCALHOST + this.port + "/signup");
-		SignUpPage signupPage = new SignUpPage(driver);
-		signupPage.signupAndGoToLogin(USERNAME, PASSWORD, USERNAME, PASSWORD);
-		LoginPage loginPage = new LoginPage(driver);
-		loginPage.login(USERNAME, PASSWORD);
-		createNote(noteTitle, noteDescription);
-		HomePage homePage = new HomePage(driver);
+		HomePage homePage = goToHomePageAndCreateNote();
 		String modifiedNoteTitle = "My Modified Note";
 		String modifiedNoteDescription = "This is my modified note.";
-		homePage.editNote(driver, noteTitle, noteDescription);
+		homePage.editNote(driver, NOTE_TITLE, NOTE_DESCRIPTION);
 		homePage.modifyNote(modifiedNoteTitle, modifiedNoteDescription);
 		homePage.saveNoteChanges(driver);
 		homePage.goToNavNotesTab(driver);
@@ -117,25 +94,12 @@ class NoteTests   {
 	}
 
 
-	//Write a test that deletes a note and verifies that the note is no longer displayed.
-	@Test
-	public void testDelete() {
-		driver.get(LOCALHOST + this.port + "/signup");
-		SignUpPage signupPage = new SignUpPage(driver);
-		signupPage.signupAndGoToLogin(USERNAME, PASSWORD, USERNAME + "1", PASSWORD+ "1");
-		LoginPage loginPage = new LoginPage(driver);
-		loginPage.login(USERNAME+ "1", PASSWORD+ "1");
 
-		String noteTitle = "My Note";
-		String noteDescription = "This is my note.";
-		HomePage homePage = new HomePage(driver);
 
-		createNote(noteTitle, noteDescription);
-		homePage.goToNavNotesTab(driver);
-		Note note = homePage.getFirstNote();
-		Assertions.assertFalse(homePage.noNotes(driver));
-		deleteNote(homePage);
-		Assertions.assertTrue(homePage.noNotes(driver));
+	private HomePage goToHomePageAndCreateNote() {
+		HomePage homePage = getHomePage(driver, baseURL);
+		createNote(NOTE_TITLE, NOTE_DESCRIPTION);
+		return homePage;
 	}
 
 	private void createNote(String noteTitle, String noteDescription) {
@@ -148,7 +112,4 @@ class NoteTests   {
 		homePage.goToNavNotesTab(driver);
 	}
 
-	private void getHomePage() {
-		driver.get(LOCALHOST + port + HOME);
-	}
 }

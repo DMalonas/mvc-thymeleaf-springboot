@@ -10,7 +10,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
+import com.udacity.jwdnd.course1.cloudstorage.persistence.Credential;
 import java.util.concurrent.TimeUnit;
 
 public class HomePage {
@@ -23,8 +23,8 @@ public class HomePage {
     @FindBy(id = "addNewNoteButton")
     private WebElement addNewNoteButton;
 
-//    @FindBy(id = "addNewCredentialsButton")
-//    private WebElement addNewCredentialsButton;
+    @FindBy(id = "addNewCredentialsButton")
+    private WebElement addNewCredentialsButton;
 //
     @FindBy(id = "note-title")
     private WebElement noteTitle;
@@ -42,9 +42,9 @@ public class HomePage {
     @FindBy(id = "nav-notes-tab")
     private WebElement navNotesTab;
 //
-//    @FindBy(id = "nav-credentials-tab")
-//    private WebElement navCredentialsTab;
-//
+    @FindBy(id = "nav-credentials-tab")
+    private WebElement navCredentialsTab;
+
 
 
     @FindBy(id = "noteButtonSaveChanges")
@@ -62,37 +62,37 @@ public class HomePage {
 
 
 //
-//    @FindBy(id = "btnEditCredential")
-//    private WebElement btnEditCredential;
+    @FindBy(id = "btnEditCredential")
+    private WebElement btnEditCredential;
 //
 
 //
     @FindBy(id = "deleteNoteAnchor")
     private WebElement deleteNoteAnchor;
 //
-//    @FindBy(id = "aDeleteCredential")
-//    private WebElement aDeleteCredential;
+    @FindBy(id = "aDeleteCredential")
+    private WebElement aDeleteCredential;
 //
-//    @FindBy(id = "credential-url")
-//    private WebElement txtCredentialUrl;
+    @FindBy(id = "credential-url")
+    private WebElement txtCredentialUrl;
 //
-//    @FindBy(id = "credential-username")
-//    private WebElement txtCredentialUsername;
+    @FindBy(id = "credential-username")
+    private WebElement txtCredentialUsername;
 //
-//    @FindBy(id = "credential-password")
-//    private WebElement txtCredentialPassword;
+    @FindBy(id = "credential-password")
+    private WebElement txtCredentialPassword;
 //
-//    @FindBy(id = "btnCredentialSaveChanges")
-//    private WebElement btnCredentialSaveChanges;
+    @FindBy(id = "btnCredentialSaveChanges")
+    private WebElement btnCredentialSaveChanges;
 //
-//    @FindBy(id = "tblCredentialUrl")
-//    private WebElement tblCredentialUrl;
+    @FindBy(id = "tblCredentialUrl")
+    private WebElement tblCredentialUrl;
 //
-//    @FindBy(id = "tblCredentialUsername")
-//    private WebElement tblCredentialUsername;
-//
-//    @FindBy(id = "tblCredentialPassword")
-//    private WebElement tblCredentialPassword;
+    @FindBy(id = "tblCredentialUsername")
+    private WebElement tblCredentialUsername;
+
+    @FindBy(id = "tblCredentialPassword")
+    private WebElement tblCredentialPassword;
 
     private final JavascriptExecutor js;
 
@@ -115,20 +115,20 @@ public class HomePage {
         editNoteButton.click();
     }
 
-//    public void editCredential() {
-//        js.executeScript("arguments[0].click();", btnEditCredential);
-//    }
+    public void editCredential() {
+        js.executeScript("arguments[0].click();", btnEditCredential);
+    }
 //
-public void deleteNote(WebDriver driver) {
+public void deleteNote(WebDriver driver) throws Exception {
     WebDriverWait wait = new WebDriverWait(driver, 10);
     WebElement deleteNoteAnchor = wait.until(ExpectedConditions.elementToBeClickable(By.id("deleteNoteAnchor")));
     deleteNoteAnchor.click();
 }
 
 //
-//    public void deleteCredential() {
-//        js.executeScript("arguments[0].click();", aDeleteCredential);
-//    }
+    public void deleteCredential() {
+        js.executeScript("arguments[0].click();", aDeleteCredential);
+    }
 
     public void uploadFile() {
         js.executeScript("arguments[0].click();", fileUpload);
@@ -140,23 +140,23 @@ public void deleteNote(WebDriver driver) {
     }
 
 
-//    public void addNewCredential() {
-//        js.executeScript("arguments[0].click();", addNewCredentialsButton);
-//    }
+    public void addNewCredential() {
+        js.executeScript("arguments[0].click();", addNewCredentialsButton);
+    }
 
 
 
-//    public void setCredentialUrl(String url) {
-//        js.executeScript("arguments[0].value='" + url + "';", txtCredentialUrl);
-//    }
+    public void setCredentialUrl(String url) {
+        js.executeScript("arguments[0].value='" + url + "';", txtCredentialUrl);
+    }
 //
-//    public void setCredentialUsername(String username) {
-//        js.executeScript("arguments[0].value='" + username + "';", txtCredentialUsername);
-//    }
+    public void setCredentialUsername(String username) {
+        js.executeScript("arguments[0].value='" + username + "';", txtCredentialUsername);
+    }
 
-//    public void setCredentialPassword(String password) {
-//        js.executeScript("arguments[0].value='" + password + "';", txtCredentialPassword);
-//    }
+    public void setCredentialPassword(String password) {
+        js.executeScript("arguments[0].value='" + password + "';", txtCredentialPassword);
+    }
 
 //    public void modifyNoteTitle(String newNoteTitle) {
 //        wait.until(ExpectedConditions.elementToBeClickable(txtNoteTitle)).clear();
@@ -179,12 +179,14 @@ public void deleteNote(WebDriver driver) {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         WebElement notesTab = wait.until(ExpectedConditions.elementToBeClickable(navNotesTab));
         notesTab.click();
+        System.out.println("_------> HSER" +
+                "2");
     }
 
-//
-//    public void navToCredentialsTab() {
-//        js.executeScript("arguments[0].click();", navCredentialsTab);
-//    }
+
+    public void navToCredentialsTab() {
+        js.executeScript("arguments[0].click();", navCredentialsTab);
+    }
 
     public void setNoteTitle(String title, WebDriver driver) {
         WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -206,9 +208,9 @@ public void deleteNote(WebDriver driver) {
 
 
 //
-//    public void saveCredentialChanges() {
-//        js.executeScript("arguments[0].click();", btnCredentialSaveChanges);
-//    }
+    public void saveCredentialChanges() {
+        js.executeScript("arguments[0].click();", btnCredentialSaveChanges);
+    }
 
     public boolean noNotes(WebDriver driver) {
         return !isElementPresent(By.id("tableNoteTitle"), driver) && !isElementPresent(By.id("tableNoteDescription"), driver);
@@ -232,16 +234,16 @@ public void deleteNote(WebDriver driver) {
 
     public Note getFirstNote() {
         String title = wait.until(ExpectedConditions.elementToBeClickable(tableNoteTitle)).getText();
-        String description = tableNoteDescription.getText();
+        String description = wait.until(ExpectedConditions.elementToBeClickable(tableNoteDescription)).getText();
 
         return new Note(title, description);
     }
 
-//    public Credential getFirstCredential() {
-//        String url = wait.until(ExpectedConditions.elementToBeClickable(tblCredentialUrl)).getText();
-//        String username = tblCredentialUsername.getText();
-//        String password = tblCredentialPassword.getText();
-//
-//        return new Credential(url, username, password);
-//    }
+    public Credential getFirstCredential() {
+        String url = wait.until(ExpectedConditions.elementToBeClickable(tblCredentialUrl)).getText();
+        String username = tblCredentialUsername.getText();
+        String password = tblCredentialPassword.getText();
+
+        return new Credential(url, username, password);
+    }
 }

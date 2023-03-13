@@ -29,4 +29,11 @@ public class Credential {
         this.userName = userName;
         this.password = password;
     }
+
+    public Credential(String url, String userName, String password) {
+        this.credentialId = credentialId;
+        this.url = url;
+        this.userName = userName;
+        this.password = password;
+    }
 }

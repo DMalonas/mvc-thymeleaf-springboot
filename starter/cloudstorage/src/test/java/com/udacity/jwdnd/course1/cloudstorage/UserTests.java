@@ -10,16 +10,11 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
+import static com.udacity.jwdnd.course1.cloudstorage.util.UtilTests.*;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserTests {
-    private static final String LOCALHOST = "http://localhost:";
-    private static final String LOGIN = "/login";
-    private static final String SIGNUP= "/signup";
-    private static final String HOME = "/home";
 
-    private static final String USERNAME = "jSmith";
-
-    private static final String PASSWORD = "1234";
     @LocalServerPort
     private int port;
 
