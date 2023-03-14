@@ -143,7 +143,7 @@ public void deleteNote(WebDriver driver) throws Exception {
     }
 
 
-    public void addNewCredential() {
+    public void addCredentials() {
         js.executeScript("arguments[0].click();", addNewCredentialsButton);
     }
 
@@ -203,7 +203,7 @@ public void deleteNote(WebDriver driver) throws Exception {
 
 
 //
-    public void saveCredentialChanges() {
+    public void saveCredentials() {
         js.executeScript("arguments[0].click();", btnCredentialSaveChanges);
     }
 

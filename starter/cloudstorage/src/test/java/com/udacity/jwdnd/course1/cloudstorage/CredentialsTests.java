@@ -15,14 +15,14 @@ public class CredentialsTests extends BaseTest {
 
     @BeforeEach
     public void beforeEach() {
-        super.beforeEach(); // Call the superclass beforeEach method to set up the driver and baseURL
+        super.beforeEach();
         homePage = getHomePage(driver, baseURL);
     }
 
     //    Write a test that creates a set of credentials, verifies that they are displayed, and verifies that the displayed password is encrypted.
     @Test
     public void credentialsCreateTest() {
-        createCredential(URL, USERNAME, PASSWORD, homePage);
+        manipulateCredentials(URL, USERNAME, PASSWORD, homePage, true);
         Assertions.assertTrue(isCredentialDisplayedOnCredentialsPage((Credential) homePage.getFirstObject(CREDENTIAL), URL, USERNAME, PASSWORD));
     }
 
@@ -31,10 +31,10 @@ public class CredentialsTests extends BaseTest {
     // and verifies that the changes are displayed.
     @Test
     public void credentialsManipulationTest() {
-        createCredential(URL, USERNAME, PASSWORD, homePage);
-        updateCredentialsEntry();
-        homePage.goToTab(driver, 2);
+        manipulateCredentials(URL, USERNAME, PASSWORD, homePage, true);
+        manipulateCredentials(URL + 1, USERNAME + 1, PASSWORD + 1, homePage, false);
         Credential editedCredentials = (Credential) homePage.getFirstObject(CREDENTIAL);
+
         Assertions.assertEquals(URL + 1, editedCredentials.getUrl());
         Assertions.assertEquals(USERNAME+ 1, editedCredentials.getUserName());
         String modifiedCredentialPassword = editedCredentials.getPassword();
@@ -43,14 +43,11 @@ public class CredentialsTests extends BaseTest {
         homePage.logout();
     }
 
-
-
-
     // Write a test that deletes an existing set of credentials and verifies that the credentials are no longer displayed.
     @Test
     public void credentialsDeleteTest() {
         for (int i = 0; i < 5; i++) {
-            createCredential(URL + i, USERNAME+ i, PASSWORD+ i, homePage);
+            manipulateCredentials(URL + i, USERNAME+ i, PASSWORD+ i, homePage, true);
         }
         while (true) {
             try {
@@ -63,16 +60,6 @@ public class CredentialsTests extends BaseTest {
         Assertions.assertTrue(homePage.noCredentials(driver));
     }
 
-
-    //Write a test that edits an existing note and verifies that the changes are displayed.
-    private void createCredential(String url, String username, String password, HomePage homePage) {
-        homePage.addNewCredential();
-        homePage.applyCredentials(url, username, password);
-        homePage.saveCredentialChanges();
-        homePage.goToTab(driver, 2);
-    }
-
-
     private boolean isCredentialDisplayedOnCredentialsPage(Credential credential, String url, String username, String password) {
         if (!(url.equals(credential.getUrl()))
                 || !(username.equals(credential.getUserName()))
@@ -82,10 +69,15 @@ public class CredentialsTests extends BaseTest {
         return true;
     }
 
-    private void updateCredentialsEntry() {
-        homePage.editCredential();
-        homePage.applyCredentials(URL + 1, USERNAME+ 1, PASSWORD+ 1);
-        homePage.saveCredentialChanges();
+    //Write a test that edits an existing note and verifies that the changes are displayed.
+    private void manipulateCredentials(String url, String username, String password, HomePage homePage, boolean isNewEntry) {
+        if (isNewEntry) {
+            homePage.addCredentials();
+        } else {
+            homePage.editCredential();
+        }
+        homePage.applyCredentials(url, username, password);
+        homePage.saveCredentials();
+        homePage.goToTab(driver, 2);
     }
-
 }
