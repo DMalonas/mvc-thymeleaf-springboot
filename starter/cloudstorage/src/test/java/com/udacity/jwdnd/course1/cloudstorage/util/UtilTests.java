@@ -18,6 +18,7 @@ public class UtilTests {
     public static final String USERNAME = "jSmith";
     public static final String PASSWORD = "1234";
 
+
     public static HomePage getHomePage(WebDriver driver, String baseURL) {
         HomePage homePage = new HomePage(driver);
         SignUpPage signUpPage = new SignUpPage(driver);

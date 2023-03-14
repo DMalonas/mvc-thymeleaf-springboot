@@ -34,7 +34,6 @@ public class CredentialsTests extends BaseTest {
         manipulateCredentials(URL, USERNAME, PASSWORD, homePage, true);
         manipulateCredentials(URL + 1, USERNAME + 1, PASSWORD + 1, homePage, false);
         Credential editedCredentials = (Credential) homePage.getFirstObject(CREDENTIAL);
-
         Assertions.assertEquals(URL + 1, editedCredentials.getUrl());
         Assertions.assertEquals(USERNAME+ 1, editedCredentials.getUserName());
         String modifiedCredentialPassword = editedCredentials.getPassword();

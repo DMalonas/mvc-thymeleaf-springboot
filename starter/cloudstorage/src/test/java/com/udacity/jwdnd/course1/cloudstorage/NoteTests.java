@@ -22,12 +22,11 @@ public class NoteTests extends BaseTest {
 	//Write a test that deletes a note and verifies that the note is no longer displayed.
 	@Test
 	public void deleteNoteTest() {
-		HomePage homePage = goToHomePageAndCreateNote();
-		createNote(NOTE_TITLE, NOTE_DESCRIPTION);
+		HomePage homePage = getHomePageAndCreateNote();
 		while (true) {
 			try {
 				homePage.goToTab(driver, 1);
-				deleteNote(homePage);
+				homePage.deleteNote(driver);
 			} catch (Exception e) {
 				break;
 			}
@@ -35,21 +34,21 @@ public class NoteTests extends BaseTest {
 		Assertions.assertTrue(homePage.noNotes(driver));
 	}
 
-	//Write a test that creates a note, and verifies it is displayed.
 	@Test
 	public void displayingExistingNoteTest() {
-		HomePage homePage = goToHomePageAndCreateNote();
+		HomePage homePage = getHomePageAndCreateNote();
 		homePage.goToTab(driver, 1);
 		Note note = (Note) homePage.getFirstObject(NOTE);
-		Assertions.assertEquals(NOTE_TITLE, note.getNoteTitle());
-		Assertions.assertEquals(NOTE_DESCRIPTION, note.getNoteDescription());
+		Assertions.assertAll(
+				() -> Assertions.assertEquals(NOTE_TITLE, note.getNoteTitle()),
+				() -> Assertions.assertEquals(NOTE_DESCRIPTION, note.getNoteDescription())
+		);
 		homePage.logout();
 	}
 
-	//Write a test that edits an existing note and verifies that the changes are displayed.
 	@Test
 	public void modifyingExistingNoteTest() {
-		HomePage homePage = goToHomePageAndCreateNote();
+		HomePage homePage = getHomePageAndCreateNote();
 		String modifiedNoteTitle = "My Modified Note";
 		String modifiedNoteDescription = "This is my modified note.";
 		homePage.editNote(driver, NOTE_TITLE, NOTE_DESCRIPTION);
@@ -57,30 +56,20 @@ public class NoteTests extends BaseTest {
 		homePage.saveNoteChanges(driver);
 		homePage.goToTab(driver, 1);
 		Note note = (Note) homePage.getFirstObject(NOTE);
-		Assertions.assertEquals(modifiedNoteTitle, note.getNoteTitle());
-		Assertions.assertEquals(modifiedNoteDescription, note.getNoteDescription());
+		Assertions.assertAll(
+				() -> Assertions.assertEquals(modifiedNoteTitle, note.getNoteTitle()),
+				() -> Assertions.assertEquals(modifiedNoteDescription, note.getNoteDescription())
+		);
 	}
 
-
-
-
-	private HomePage goToHomePageAndCreateNote() {
+	private HomePage getHomePageAndCreateNote() {
 		HomePage homePage = getHomePage(driver, baseURL);
-		createNote(NOTE_TITLE, NOTE_DESCRIPTION);
-		return homePage;
-	}
-
-	private void createNote(String noteTitle, String noteDescription) {
-		HomePage homePage = new HomePage(driver);
 		homePage.goToTab(driver, 1);
 		homePage.createNote();
-		homePage.setNoteTitle(noteTitle, driver);
-		homePage.setNoteDescription(noteDescription, driver);
+		homePage.setNoteTitle(NOTE_TITLE, driver);
+		homePage.setNoteDescription(NOTE_DESCRIPTION, driver);
 		homePage.saveNoteChanges(driver);
 		homePage.goToTab(driver, 1);
-	}
-
-	private void deleteNote(HomePage homePage) throws Exception {
-		homePage.deleteNote(driver);
+		return homePage;
 	}
 }
