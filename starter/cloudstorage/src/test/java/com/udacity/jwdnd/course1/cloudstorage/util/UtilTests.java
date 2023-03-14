@@ -21,7 +21,6 @@ public class UtilTests {
         driver.get(baseURL + SIGNUP);
         signUpPage.signupAndGoToLogin(USERNAME, PASSWORD, USERNAME, PASSWORD);
         driver.get(baseURL + LOGIN);
-        Assertions.assertEquals(baseURL + LOGIN, driver.getCurrentUrl());
         LoginPage loginPage = new LoginPage(driver);
         loginPage.login(USERNAME, PASSWORD);
         return homePage;

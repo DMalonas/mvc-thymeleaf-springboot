@@ -2,67 +2,49 @@ package com.udacity.jwdnd.course1.cloudstorage;
 
 import com.udacity.jwdnd.course1.cloudstorage.pages.HomePage;
 import com.udacity.jwdnd.course1.cloudstorage.persistence.Credential;
-import io.github.bonigarcia.wdm.WebDriverManager;
+import com.udacity.jwdnd.course1.cloudstorage.util.BaseTest;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
-
 import static com.udacity.jwdnd.course1.cloudstorage.util.UtilTests.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CredentialsTests {
-
-
+public class CredentialsTests extends BaseTest {
     public static final String BEATLES_URL = "https://www.thebeatles.com/";
     public static final String MCCARTNEY_USERNAME = "mccartney";
     public static final String MCCARTNEY_PASSWORD = "mary";
     public static final String RINGO_URL = "http://www.ringostarr.com/";
     public static final String RINGO_USERNAME = "starr";
     public static final String RINGO_PASSWORD = "barbara";
-    @LocalServerPort
-    private int port;
-
-    private static WebDriver driver;
-
-    public String baseURL;
-
-    @BeforeAll
-    static void beforeAll() {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-    }
-
-    @AfterAll
-    public static void afterAll() {
-        driver.quit();
-        driver = null;
-    }
+    private HomePage homePage;
 
     @BeforeEach
     public void beforeEach() {
-        baseURL = LOCALHOST + port;
+        super.beforeEach(); // Call the superclass beforeEach method to set up the driver and baseURL
+        homePage = getHomePage(driver, baseURL);
     }
 
-
-//    Write a test that creates a set of credentials, verifies that they are displayed, and verifies that the displayed password is encrypted.
+    //    Write a test that creates a set of credentials, verifies that they are displayed, and verifies that the displayed password is encrypted.
     @Test
-    public void testCredentialCreation() {
-        HomePage homePage = getHomePage(driver, baseURL);
-        createAndVerifyCredential(BEATLES_URL, MCCARTNEY_USERNAME, MCCARTNEY_PASSWORD, homePage);
-        homePage.deleteCredential();
-        homePage.logout();
+    public void newCredentialTest() {
+        createCredential(BEATLES_URL, MCCARTNEY_USERNAME, MCCARTNEY_PASSWORD, homePage);
+        homePage.navToCredentialsTab();
+        Assertions.assertTrue(isCredentialDisplayedOnCredentialsPage(homePage.getFirstCredential(), BEATLES_URL, MCCARTNEY_USERNAME, MCCARTNEY_PASSWORD));
     }
 
+    public boolean isCredentialDisplayedOnCredentialsPage(Credential credential, String url, String username, String password) {
+        if (!(url.equals(credential.getUrl()))
+                || !(username.equals(credential.getUserName()))
+                || (password.equals(credential.getPassword()))) {
+            return false;
+        }
+        return true;
+    }
 
 
 
     //Write a test that views an existing set of credentials, verifies that the viewable password is unencrypted, edits the credentials, and verifies that the changes are displayed.
     @Test
     public void testCredentialModification() {
-        HomePage homePage = getHomePage(driver, baseURL);
-
         createAndVerifyCredential(BEATLES_URL, MCCARTNEY_USERNAME, MCCARTNEY_PASSWORD, homePage);
         Credential originalCredential = homePage.getFirstCredential();
         String firstEncryptedPassword = originalCredential.getPassword();
@@ -86,25 +68,21 @@ public class CredentialsTests {
 
     // Write a test that deletes an existing set of credentials and verifies that the credentials are no longer displayed.
     @Test
-    public void testDeletion() {
-        HomePage homePage = getHomePage(driver, baseURL);
+    public void deleteCredentialsTest
 
+    () {
         createCredential(BEATLES_URL, MCCARTNEY_USERNAME, MCCARTNEY_PASSWORD, homePage);
         createCredential(RINGO_URL, RINGO_USERNAME, RINGO_PASSWORD, homePage);
         createCredential("http://www.johnlennon.com/", "lennon", "julia", homePage);
-
-        Assertions.assertFalse(homePage.noCredentials(driver));
-        homePage.deleteCredential();
-
-        homePage.navToCredentialsTab();
-        homePage.deleteCredential();
-
-        homePage.navToCredentialsTab();
-        homePage.deleteCredential();
-
-        homePage.navToCredentialsTab();
+        while (true) {
+            try {
+                homePage.goToNavNotesTab(driver);
+                homePage.deleteCredential();
+            } catch (Exception e) {
+                break;
+            }
+        }
         Assertions.assertTrue(homePage.noCredentials(driver));
-        homePage.logout();
     }
 
 

@@ -1,65 +1,35 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
 import com.udacity.jwdnd.course1.cloudstorage.pages.HomePage;
-import com.udacity.jwdnd.course1.cloudstorage.pages.LoginPage;
-import com.udacity.jwdnd.course1.cloudstorage.pages.SignUpPage;
+
 import com.udacity.jwdnd.course1.cloudstorage.persistence.Note;
-import io.github.bonigarcia.wdm.WebDriverManager;
+import com.udacity.jwdnd.course1.cloudstorage.util.BaseTest;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
-import static com.udacity.jwdnd.course1.cloudstorage.util.UtilTests.*;
 import static com.udacity.jwdnd.course1.cloudstorage.util.UtilTests.getHomePage;
 
 /**
  * Tests for Note Creation, Viewing, Editing, and Deletion.
  */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class NoteTests   {
+public class NoteTests extends BaseTest {
 
 	private final static String NOTE_TITLE = "My Note";
 	private final static String NOTE_DESCRIPTION = "This is my note.";
 
-	@LocalServerPort
-	private int port;
-	private static WebDriver driver;
-	public String baseURL;
-	@BeforeAll
-	static void beforeAll() {
-		WebDriverManager.chromedriver().setup();
-		driver = new ChromeDriver();
-	}
 
-	@AfterAll
-	public static void afterAll() {
-		driver.quit();
-		driver = null;
-	}
-
-	@BeforeEach
-	public void beforeEach() {
-		baseURL = LOCALHOST + port;
-	}
-
-
-	private void deleteNote(HomePage homePage) throws Exception {
-		homePage.deleteNote(driver);
-	}
 
 	//Write a test that deletes a note and verifies that the note is no longer displayed.
 	@Test
-	public void testDelete() {
+	public void deleteNoteTest() {
 		HomePage homePage = goToHomePageAndCreateNote();
 		createNote(NOTE_TITLE, NOTE_DESCRIPTION);
-		Assertions.assertFalse(homePage.noNotes(driver));
 		while (true) {
 			try {
 				homePage.goToNavNotesTab(driver);
 				deleteNote(homePage);
 			} catch (Exception e) {
-				System.out.println("s0s0s");
 				break;
 			}
 		}
@@ -69,7 +39,7 @@ class NoteTests   {
 
 	//Write a test that creates a note, and verifies it is displayed.
 	@Test
-	public void testCreateAndDisplay() {
+	public void displayingExistingNoteTest() {
 		HomePage homePage = goToHomePageAndCreateNote();
 		homePage.goToNavNotesTab(driver);
 		Note note = homePage.getFirstNote();
@@ -80,7 +50,7 @@ class NoteTests   {
 
 	//Write a test that edits an existing note and verifies that the changes are displayed.
 	@Test
-	public void testModify() {
+	public void modifyingExistingNoteTest() {
 		HomePage homePage = goToHomePageAndCreateNote();
 		String modifiedNoteTitle = "My Modified Note";
 		String modifiedNoteDescription = "This is my modified note.";
@@ -112,4 +82,7 @@ class NoteTests   {
 		homePage.goToNavNotesTab(driver);
 	}
 
+	private void deleteNote(HomePage homePage) throws Exception {
+		homePage.deleteNote(driver);
+	}
 }

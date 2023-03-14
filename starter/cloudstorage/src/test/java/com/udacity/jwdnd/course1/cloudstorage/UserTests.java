@@ -3,72 +3,43 @@ package com.udacity.jwdnd.course1.cloudstorage;
 import com.udacity.jwdnd.course1.cloudstorage.pages.HomePage;
 import com.udacity.jwdnd.course1.cloudstorage.pages.LoginPage;
 import com.udacity.jwdnd.course1.cloudstorage.pages.SignUpPage;
-import io.github.bonigarcia.wdm.WebDriverManager;
+import com.udacity.jwdnd.course1.cloudstorage.util.BaseTest;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
 
 import static com.udacity.jwdnd.course1.cloudstorage.util.UtilTests.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserTests {
+public class UserTests extends BaseTest {
 
-    @LocalServerPort
-    private int port;
-
-    private static WebDriver driver;
-
-    public String baseURL;
-
-    @BeforeAll
-    static void beforeAll() {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-    }
-
-    @AfterAll
-    public static void afterAll() {
-        driver.quit();
-        driver = null;
-    }
-
-    @BeforeEach
-    public void beforeEach() {
-        baseURL = LOCALHOST + port;
-    }
 
     //Write a test that verifies that an unauthorized user can only access the login and signup pages.
     @Test
-    public void unauthorizedUserTest() {
-        //Cannot access home
-        driver.get(baseURL + HOME);
-        Assertions.assertEquals(baseURL + LOGIN, driver.getCurrentUrl());
-        //Can access login
-        driver.get(baseURL + LOGIN);
-        Assertions.assertEquals(baseURL + LOGIN, driver.getCurrentUrl());
-        //Can access signup
-        driver.get(baseURL + SIGNUP);
-        Assertions.assertEquals(baseURL + SIGNUP, driver.getCurrentUrl());
+    public void onlyLoginAndSignupAccessibleToUnauthorizedUserTest() {
+        // Verify that unauthorized user cannot access restricted pages
+        navigateToPageAndVerifyURL(baseURL + HOME, baseURL + LOGIN);
+        navigateToPageAndVerifyURL(baseURL + LOGIN, baseURL + LOGIN);
+        navigateToPageAndVerifyURL(baseURL + SIGNUP, baseURL + SIGNUP);
+        navigateToPageAndVerifyURL(baseURL + HOME, baseURL + LOGIN);
     }
 
-    //Write a test that signs up a new user, logs in,
-    // verifies that the home page is accessible, logs out,
-    // and verifies that the home page is no longer accessible.
+    //Write a test that signs up a new user, logs in, verifies that the home page is accessible, logs out, and verifies that the home page is no longer accessible.
     @Test
-    public void signUpLoginLogout() {
-        driver.get(LOCALHOST + this.port + "/signup");
-        Assertions.assertEquals(baseURL + SIGNUP, driver.getCurrentUrl());
+    public void userAuthenticationFlowTest() {
+        navigateToPageAndVerifyURL(baseURL + SIGNUP, baseURL + SIGNUP);
         SignUpPage signupPage = new SignUpPage(driver);
-        signupPage.signupAndGoToLogin("John", "Smith", "jSmith", "1234");
-        driver.get(baseURL + LOGIN);
-        Assertions.assertEquals(baseURL + LOGIN, driver.getCurrentUrl());
+        signupPage.signupAndGoToLogin(USERNAME, USERNAME, USERNAME, PASSWORD);
+            navigateToPageAndVerifyURL(baseURL + LOGIN, baseURL + LOGIN);
         LoginPage loginPage = new LoginPage(driver);
         loginPage.login(USERNAME, PASSWORD);
         HomePage homePage = new HomePage(driver);
         homePage.logout();
-        driver.get(baseURL + HOME);
-        Assertions.assertEquals(baseURL + LOGIN, driver.getCurrentUrl());
+        navigateToPageAndVerifyURL(baseURL + HOME, baseURL + LOGIN);
+    }
+
+
+    private void navigateToPageAndVerifyURL(String url, String expectedURL) {
+        driver.get(url);
+        Assertions.assertEquals(expectedURL, driver.getCurrentUrl());
     }
 }

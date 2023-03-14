@@ -78,16 +78,16 @@ public class HomePage {
 //
     @FindBy(id = "credential-username")
     private WebElement txtCredentialUsername;
-//
+
     @FindBy(id = "credential-password")
     private WebElement txtCredentialPassword;
-//
+
     @FindBy(id = "btnCredentialSaveChanges")
     private WebElement btnCredentialSaveChanges;
-//
+
     @FindBy(id = "tblCredentialUrl")
     private WebElement tblCredentialUrl;
-//
+
     @FindBy(id = "tblCredentialUsername")
     private WebElement tblCredentialUsername;
 
@@ -118,14 +118,14 @@ public class HomePage {
     public void editCredential() {
         js.executeScript("arguments[0].click();", btnEditCredential);
     }
-//
+
 public void deleteNote(WebDriver driver) throws Exception {
     WebDriverWait wait = new WebDriverWait(driver, 10);
     WebElement deleteNoteAnchor = wait.until(ExpectedConditions.elementToBeClickable(By.id("deleteNoteAnchor")));
     deleteNoteAnchor.click();
 }
 
-//
+
     public void deleteCredential() {
         js.executeScript("arguments[0].click();", aDeleteCredential);
     }
@@ -149,7 +149,7 @@ public void deleteNote(WebDriver driver) throws Exception {
     public void setCredentialUrl(String url) {
         js.executeScript("arguments[0].value='" + url + "';", txtCredentialUrl);
     }
-//
+
     public void setCredentialUsername(String username) {
         js.executeScript("arguments[0].value='" + username + "';", txtCredentialUsername);
     }
@@ -158,11 +158,7 @@ public void deleteNote(WebDriver driver) throws Exception {
         js.executeScript("arguments[0].value='" + password + "';", txtCredentialPassword);
     }
 
-//    public void modifyNoteTitle(String newNoteTitle) {
-//        wait.until(ExpectedConditions.elementToBeClickable(txtNoteTitle)).clear();
-//        wait.until(ExpectedConditions.elementToBeClickable(txtNoteTitle)).sendKeys(newNoteTitle);
-//    }
-//
+
     public void modifyNoteDescription(String newNoteDescription) {
         wait.until(ExpectedConditions.elementToBeClickable(txtModifyNoteDescription)).clear();
         wait.until(ExpectedConditions.elementToBeClickable(txtModifyNoteDescription)).sendKeys(newNoteDescription);
