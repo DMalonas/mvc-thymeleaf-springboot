@@ -21,20 +21,16 @@ public class CredentialsTests extends BaseTest {
 
     //    Write a test that creates a set of credentials, verifies that they are displayed, and verifies that the displayed password is encrypted.
     @Test
-    public void newCredentialTest() {
+    public void credentialsCreateTest() {
         createCredential(URL, USERNAME, PASSWORD, homePage);
         Assertions.assertTrue(isCredentialDisplayedOnCredentialsPage((Credential) homePage.getFirstObject(CREDENTIAL), URL, USERNAME, PASSWORD));
     }
-
-
-
-
 
     //Write a test that views an existing set of credentials, verifies that the viewable password is unencrypted,
     // edits the credentials,
     // and verifies that the changes are displayed.
     @Test
-    public void testCredentialModification() {
+    public void credentialsManipulationTest() {
         createCredential(URL, USERNAME, PASSWORD, homePage);
         updateCredentialsEntry();
         homePage.goToTab(driver, 2);
@@ -47,16 +43,12 @@ public class CredentialsTests extends BaseTest {
         homePage.logout();
     }
 
-    private void updateCredentialsEntry() {
-        homePage.editCredential();
-        homePage.applyCredentials(URL + 1, USERNAME+ 1, PASSWORD+ 1);
-        homePage.saveCredentialChanges();
-    }
+
 
 
     // Write a test that deletes an existing set of credentials and verifies that the credentials are no longer displayed.
     @Test
-    public void deleteCredentialsTest() {
+    public void credentialsDeleteTest() {
         for (int i = 0; i < 5; i++) {
             createCredential(URL + i, USERNAME+ i, PASSWORD+ i, homePage);
         }
@@ -80,13 +72,20 @@ public class CredentialsTests extends BaseTest {
         homePage.goToTab(driver, 2);
     }
 
-    public boolean isCredentialDisplayedOnCredentialsPage(Credential credential, String url, String username, String password) {
+
+    private boolean isCredentialDisplayedOnCredentialsPage(Credential credential, String url, String username, String password) {
         if (!(url.equals(credential.getUrl()))
                 || !(username.equals(credential.getUserName()))
                 || (password.equals(credential.getPassword()))) {
             return false;
         }
         return true;
+    }
+
+    private void updateCredentialsEntry() {
+        homePage.editCredential();
+        homePage.applyCredentials(URL + 1, USERNAME+ 1, PASSWORD+ 1);
+        homePage.saveCredentialChanges();
     }
 
 }
