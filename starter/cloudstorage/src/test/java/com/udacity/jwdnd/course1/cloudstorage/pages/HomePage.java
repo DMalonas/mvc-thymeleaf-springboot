@@ -147,17 +147,9 @@ public void deleteNote(WebDriver driver) throws Exception {
         js.executeScript("arguments[0].click();", addNewCredentialsButton);
     }
 
-
-
-    public void setCredentialUrl(String url) {
+    public void applyCredentials(String url, String username, String password) {
         js.executeScript("arguments[0].value='" + url + "';", txtCredentialUrl);
-    }
-
-    public void setCredentialUsername(String username) {
         js.executeScript("arguments[0].value='" + username + "';", txtCredentialUsername);
-    }
-
-    public void setCredentialPassword(String password) {
         js.executeScript("arguments[0].value='" + password + "';", txtCredentialPassword);
     }
 

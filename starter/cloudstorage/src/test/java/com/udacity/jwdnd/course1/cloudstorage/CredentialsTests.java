@@ -49,7 +49,7 @@ public class CredentialsTests extends BaseTest {
 
     private void updateCredentialsEntry() {
         homePage.editCredential();
-        setCredentialFields(URL + 1, USERNAME+ 1, PASSWORD+ 1, homePage);
+        homePage.applyCredentials(URL + 1, USERNAME+ 1, PASSWORD+ 1);
         homePage.saveCredentialChanges();
     }
 
@@ -75,16 +75,9 @@ public class CredentialsTests extends BaseTest {
     //Write a test that edits an existing note and verifies that the changes are displayed.
     private void createCredential(String url, String username, String password, HomePage homePage) {
         homePage.addNewCredential();
-        setCredentialFields(url, username, password, homePage);
+        homePage.applyCredentials(url, username, password);
         homePage.saveCredentialChanges();
         homePage.goToTab(driver, 2);
-    }
-
-
-    private void setCredentialFields(String url, String username, String password, HomePage homePage) {
-        homePage.setCredentialUrl(url);
-        homePage.setCredentialUsername(username);
-        homePage.setCredentialPassword(password);
     }
 
     public boolean isCredentialDisplayedOnCredentialsPage(Credential credential, String url, String username, String password) {
