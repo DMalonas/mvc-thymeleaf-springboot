@@ -39,12 +39,15 @@ public class HomePage {
     @FindBy(id = "note-description")
     private WebElement noteDescription;
 //
+
+    @FindBy(id = "nav-files-tab")
+    private WebElement navFilesTab;
+
     @FindBy(id = "nav-notes-tab")
     private WebElement navNotesTab;
 //
     @FindBy(id = "nav-credentials-tab")
     private WebElement navCredentialsTab;
-
 
 
     @FindBy(id = "noteButtonSaveChanges")
@@ -171,18 +174,22 @@ public void deleteNote(WebDriver driver) throws Exception {
         noteDescription.sendKeys(newNoteDescription);
     }
 
-    public void goToNavNotesTab(WebDriver driver) {
+
+
+    public void goToTab(WebDriver driver, int tab) {
         WebDriverWait wait = new WebDriverWait(driver, 10);
-        WebElement notesTab = wait.until(ExpectedConditions.elementToBeClickable(navNotesTab));
-        notesTab.click();
-        System.out.println("_------> HSER" +
-                "2");
+        WebElement tabToGoTo = null;
+        if (tab == 0) {
+            tabToGoTo = wait.until(ExpectedConditions.elementToBeClickable(navFilesTab));
+        } else if (tab == 1) {
+            tabToGoTo = wait.until(ExpectedConditions.elementToBeClickable(navNotesTab));
+        }  else if (tab == 2) {
+            tabToGoTo = wait.until(ExpectedConditions.elementToBeClickable(navCredentialsTab));
+        }
+        tabToGoTo.click();
     }
 
 
-    public void navToCredentialsTab() {
-        js.executeScript("arguments[0].click();", navCredentialsTab);
-    }
 
     public void setNoteTitle(String title, WebDriver driver) {
         WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -231,7 +238,6 @@ public void deleteNote(WebDriver driver) throws Exception {
     public Note getFirstNote() {
         String title = wait.until(ExpectedConditions.elementToBeClickable(tableNoteTitle)).getText();
         String description = wait.until(ExpectedConditions.elementToBeClickable(tableNoteDescription)).getText();
-
         return new Note(title, description);
     }
 
@@ -239,7 +245,22 @@ public void deleteNote(WebDriver driver) throws Exception {
         String url = wait.until(ExpectedConditions.elementToBeClickable(tblCredentialUrl)).getText();
         String username = tblCredentialUsername.getText();
         String password = tblCredentialPassword.getText();
-
         return new Credential(url, username, password);
     }
+
+    public Object getFirstObject(String objectType) {
+        if (objectType.equalsIgnoreCase("note")) {
+            String title = wait.until(ExpectedConditions.elementToBeClickable(tableNoteTitle)).getText();
+            String description = wait.until(ExpectedConditions.elementToBeClickable(tableNoteDescription)).getText();
+            return new Note(title, description);
+        } else if (objectType.equalsIgnoreCase("credential")) {
+            String url = wait.until(ExpectedConditions.elementToBeClickable(tblCredentialUrl)).getText();
+            String username = tblCredentialUsername.getText();
+            String password = tblCredentialPassword.getText();
+            return new Credential(url, username, password);
+        } else {
+            throw new IllegalArgumentException("Invalid object type: " + objectType);
+        }
+    }
+
 }

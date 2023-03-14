@@ -1,7 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
 import com.udacity.jwdnd.course1.cloudstorage.pages.HomePage;
-
 import com.udacity.jwdnd.course1.cloudstorage.persistence.Note;
 import com.udacity.jwdnd.course1.cloudstorage.util.BaseTest;
 import org.junit.jupiter.api.*;
@@ -17,7 +16,7 @@ public class NoteTests extends BaseTest {
 
 	private final static String NOTE_TITLE = "My Note";
 	private final static String NOTE_DESCRIPTION = "This is my note.";
-
+	public static final String NOTE = "note";
 
 
 	//Write a test that deletes a note and verifies that the note is no longer displayed.
@@ -27,13 +26,12 @@ public class NoteTests extends BaseTest {
 		createNote(NOTE_TITLE, NOTE_DESCRIPTION);
 		while (true) {
 			try {
-				homePage.goToNavNotesTab(driver);
+				homePage.goToTab(driver, 1);
 				deleteNote(homePage);
 			} catch (Exception e) {
 				break;
 			}
 		}
-
 		Assertions.assertTrue(homePage.noNotes(driver));
 	}
 
@@ -41,8 +39,8 @@ public class NoteTests extends BaseTest {
 	@Test
 	public void displayingExistingNoteTest() {
 		HomePage homePage = goToHomePageAndCreateNote();
-		homePage.goToNavNotesTab(driver);
-		Note note = homePage.getFirstNote();
+		homePage.goToTab(driver, 1);
+		Note note = (Note) homePage.getFirstObject(NOTE);
 		Assertions.assertEquals(NOTE_TITLE, note.getNoteTitle());
 		Assertions.assertEquals(NOTE_DESCRIPTION, note.getNoteDescription());
 		homePage.logout();
@@ -57,8 +55,8 @@ public class NoteTests extends BaseTest {
 		homePage.editNote(driver, NOTE_TITLE, NOTE_DESCRIPTION);
 		homePage.modifyNote(modifiedNoteTitle, modifiedNoteDescription);
 		homePage.saveNoteChanges(driver);
-		homePage.goToNavNotesTab(driver);
-		Note note = homePage.getFirstNote();
+		homePage.goToTab(driver, 1);
+		Note note = (Note) homePage.getFirstObject(NOTE);
 		Assertions.assertEquals(modifiedNoteTitle, note.getNoteTitle());
 		Assertions.assertEquals(modifiedNoteDescription, note.getNoteDescription());
 	}
@@ -74,12 +72,12 @@ public class NoteTests extends BaseTest {
 
 	private void createNote(String noteTitle, String noteDescription) {
 		HomePage homePage = new HomePage(driver);
-		homePage.goToNavNotesTab(driver);
+		homePage.goToTab(driver, 1);
 		homePage.createNote();
 		homePage.setNoteTitle(noteTitle, driver);
 		homePage.setNoteDescription(noteDescription, driver);
 		homePage.saveNoteChanges(driver);
-		homePage.goToNavNotesTab(driver);
+		homePage.goToTab(driver, 1);
 	}
 
 	private void deleteNote(HomePage homePage) throws Exception {
