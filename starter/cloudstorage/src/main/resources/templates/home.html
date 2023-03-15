@@ -95,7 +95,7 @@
                                            th:href="@{/note/delete/{noteId}(noteId = ${note.getNoteId()})}">Delete</a>
                                     </td>
                                     <th id="noteTitleId" scope="row" th:text="${note.getNoteTitle()}">Example Note Title</th>
-                                    <td id="tableNoteDescription" th:text="${note.getNoteDescription()}">Example Note Description</td>
+                                    <td id="noteDescriptionId" th:text="${note.getNoteDescription()}">Example Note Description</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -165,9 +165,9 @@
                                         <a class="btn btn-danger" id="deleteCredentialsId"
                                            th:href="@{/credentials/delete/{credentialId}(credentialId = ${credential.getCredentialId()})}">Delete</a>
                                     </td>
-                                    <th id="tblCredentialUrl" scope="row" th:text="${credential.getUrl()}">Example Credential URL</th>
-                                    <td id="tblCredentialUsername" th:text="${credential.getUserName()}">Example Credential Username</td>
-                                    <td id="tblCredentialPassword" th:text="${credential.getPassword()}">Example Credential Password</td>
+                                    <th id="credentialsUrlId" scope="row" th:text="${credential.getUrl()}">Example Credential URL</th>
+                                    <td id="credentialsUserNameId" th:text="${credential.getUserName()}">Example Credential Username</td>
+                                    <td id="credentialsPasswordId" th:text="${credential.getPassword()}">Example Credential Password</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -206,7 +206,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button id="btnCredentialSaveChanges" type="button" class="btn btn-primary" onclick="$('#credentialSubmit').click();">
+                                        <button id="credentialsSaveButton" type="button" class="btn btn-primary" onclick="$('#credentialSubmit').click();">
                                             Save changes
                                         </button>
                                     </div>

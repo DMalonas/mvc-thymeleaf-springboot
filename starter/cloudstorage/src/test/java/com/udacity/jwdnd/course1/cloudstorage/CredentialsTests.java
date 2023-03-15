@@ -39,7 +39,7 @@ public class CredentialsTests extends BaseTest {
         Assertions.assertEquals(USERNAME+ 1, editedCredentials.getUserName());
         String modifiedCredentialPassword = editedCredentials.getPassword();
         Assertions.assertNotEquals(PASSWORD+ 1, modifiedCredentialPassword);
-        homePage.deleteCredential();
+        homePage.deleteCredentials();
         homePage.logout();
     }
 
@@ -52,7 +52,7 @@ public class CredentialsTests extends BaseTest {
         while (true) {
             try {
                 homePage.goToTab(driver, 2);
-                homePage.deleteCredential();
+                homePage.deleteCredentials();
             } catch (Exception e) {
                 break;
             }

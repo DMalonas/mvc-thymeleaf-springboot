@@ -16,15 +16,15 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class HomePage {
-    @FindBy(id = "btn-logout")
-    private WebElement logoutButton;
 
     @FindBy(id = "fileUpload")
     private WebElement fileUpload;
 
+    @FindBy(id = "noteButtonSaveChanges")
+    private WebElement noteButtonSaveChanges;
+
     @FindBy(id = "addNewNoteButton")
     private WebElement addNewNoteButton;
-
     @FindBy(id = "addNewCredentialsButton")
     private WebElement addNewCredentialsButton;
 
@@ -34,29 +34,25 @@ public class HomePage {
     @FindBy(css = "button[title='%s'][description='%s']")
     private WebElement editNoteButton;
 
-
     @FindBy(id = "note-description")
     private WebElement noteDescription;
-
-
-    @FindBy(id = "nav-files-tab")
-    private WebElement navFilesTab;
-
-    @FindBy(id = "nav-notes-tab")
-    private WebElement navNotesTab;
 
     @FindBy(id = "nav-credentials-tab")
     private WebElement navCredentialsTab;
 
+    @FindBy(id = "btn-logout")
+    private WebElement logoutButton;
 
-    @FindBy(id = "noteButtonSaveChanges")
-    private WebElement noteButtonSaveChanges;
+    @FindBy(id = "credentialsSaveButton")
+    private WebElement credentialsSaveButton;
+    @FindBy(id = "credential-password")
+    private WebElement txtCredentialPassword;
+
+    @FindBy(id = "nav-notes-tab")
+    private WebElement navNotesTab;
 
     @FindBy(id = "noteTitleId")
     private WebElement noteTitleId;
-
-    @FindBy(id = "tableNoteDescription")
-    private WebElement tableNoteDescription;
 
     @FindBy(id = "editCredentialsButton")
     private WebElement editCredentialsButton;
@@ -64,29 +60,31 @@ public class HomePage {
     @FindBy(id = "deleteNoteAnchor")
     private WebElement deleteNoteAnchor;
 
-    @FindBy(id = "deleteCredentialsId")
-    private WebElement deleteCredentialsId;
+    @FindBy(id = "noteDescriptionId")
+    private WebElement noteDescriptionId;
 
     @FindBy(id = "credential-url")
     private WebElement txtCredentialUrl;
 
+    @FindBy(id = "nav-files-tab")
+    private WebElement navFilesTab;
     @FindBy(id = "credential-username")
     private WebElement txtCredentialUsername;
 
-    @FindBy(id = "credential-password")
-    private WebElement txtCredentialPassword;
+    @FindBy(id = "credentialsUserNameId")
+    private WebElement credentialsUserNameId;
 
-    @FindBy(id = "btnCredentialSaveChanges")
-    private WebElement btnCredentialSaveChanges;
 
-    @FindBy(id = "tblCredentialUrl")
-    private WebElement tblCredentialUrl;
+    @FindBy(id = "deleteCredentialsId")
+    private WebElement deleteCredentialsId;
 
-    @FindBy(id = "tblCredentialUsername")
-    private WebElement tblCredentialUsername;
 
-    @FindBy(id = "tblCredentialPassword")
-    private WebElement tblCredentialPassword;
+    @FindBy(id = "credentialsPasswordId")
+    private WebElement credentialsPasswordId;
+
+    @FindBy(id = "credentialsUrlId")
+    private WebElement credentialsUrlId;
+
 
     private final JavascriptExecutor js;
 
@@ -102,34 +100,40 @@ public class HomePage {
         logoutButton.click();
     }
 
-    public void editNote(WebDriver webDriver, String title, String description) {
+    public void modifyNote(WebDriver webDriver, String title, String description) {
         String cssSelector = String.format("button[title='%s'][description='%s']", title, description);
         webDriver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS); // 10 second timeout
         WebElement editNoteButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(cssSelector)));
         editNoteButton.click();
     }
 
+    public void deleteNote(WebDriver driver) throws Exception {
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        WebElement deleteNoteAnchor = wait.until(ExpectedConditions.elementToBeClickable(By.id("deleteNoteAnchor")));
+        deleteNoteAnchor.click();
+    }
+    public void addCredentials() {
+        js.executeScript("arguments[0].click();", addNewCredentialsButton);
+    }
 
-
-public void deleteNote(WebDriver driver) throws Exception {
-    WebDriverWait wait = new WebDriverWait(driver, 10);
-    WebElement deleteNoteAnchor = wait.until(ExpectedConditions.elementToBeClickable(By.id("deleteNoteAnchor")));
-    deleteNoteAnchor.click();
-}
-
-
-    public void deleteCredential() {
+    public void editCredentials() {
+        js.executeScript("arguments[0].click();", editCredentialsButton);
+    }
+    
+    public void deleteCredentials() {
         js.executeScript("arguments[0].click();", deleteCredentialsId);
     }
+
 
     public void createNote() {
         wait.until(ExpectedConditions.elementToBeClickable(addNewNoteButton));
         addNewNoteButton.click();
     }
-
-
-    public void addCredentials() {
-        js.executeScript("arguments[0].click();", addNewCredentialsButton);
+    public void modifyNote(String newNoteTitle, String newNoteDescription) {
+        wait.until(ExpectedConditions.elementToBeClickable(noteTitle)).clear();
+        noteTitle.sendKeys(newNoteTitle);
+        wait.until(ExpectedConditions.elementToBeClickable(noteDescription)).clear();
+        noteDescription.sendKeys(newNoteDescription);
     }
 
     public void applyCredentials(String url, String username, String password) {
@@ -137,20 +141,6 @@ public void deleteNote(WebDriver driver) throws Exception {
         js.executeScript("arguments[0].value='" + username + "';", txtCredentialUsername);
         js.executeScript("arguments[0].value='" + password + "';", txtCredentialPassword);
     }
-
-    public void editCredentials() {
-        js.executeScript("arguments[0].click();", editCredentialsButton);
-    }
-
-
-    public void editNote(String newNoteTitle, String newNoteDescription) {
-        wait.until(ExpectedConditions.elementToBeClickable(noteTitle)).clear();
-        noteTitle.sendKeys(newNoteTitle);
-        wait.until(ExpectedConditions.elementToBeClickable(noteDescription)).clear();
-        noteDescription.sendKeys(newNoteDescription);
-    }
-
-
 
     public void goToTab(WebDriver driver, int tab) {
         WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -188,7 +178,7 @@ public void deleteNote(WebDriver driver) throws Exception {
 
 
     public void saveCredentials() {
-        js.executeScript("arguments[0].click();", btnCredentialSaveChanges);
+        js.executeScript("arguments[0].click();", credentialsSaveButton);
     }
 
     public boolean areElementsAbsent(WebDriver driver, String elementType, By... locatorKeys) {
@@ -211,12 +201,12 @@ public void deleteNote(WebDriver driver) throws Exception {
     public Object popObject(String objectType) {
         if (objectType.equalsIgnoreCase("note")) {
             String title = wait.until(ExpectedConditions.elementToBeClickable(noteTitleId)).getText();
-            String description = wait.until(ExpectedConditions.elementToBeClickable(tableNoteDescription)).getText();
+            String description = wait.until(ExpectedConditions.elementToBeClickable(noteDescriptionId)).getText();
             return new Note(title, description);
         } else if (objectType.equalsIgnoreCase("credential")) {
-            String url = wait.until(ExpectedConditions.elementToBeClickable(tblCredentialUrl)).getText();
-            String username = tblCredentialUsername.getText();
-            String password = tblCredentialPassword.getText();
+            String url = wait.until(ExpectedConditions.elementToBeClickable(credentialsUrlId)).getText();
+            String username = credentialsUserNameId.getText();
+            String password = credentialsPasswordId.getText();
             return new Credential(url, username, password);
         } else {
             throw new IllegalArgumentException("Invalid object type: " + objectType);
