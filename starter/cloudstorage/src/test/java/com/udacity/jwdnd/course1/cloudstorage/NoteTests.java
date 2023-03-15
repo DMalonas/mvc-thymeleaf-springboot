@@ -52,9 +52,7 @@ public class NoteTests extends BaseTest {
 		HomePage homePage = getHomePageAndCreateNote();
 		String modifiedNoteTitle = "My Modified Note";
 		String modifiedNoteDescription = "This is my modified note.";
-		homePage.modifyNote(driver, NOTE_TITLE, NOTE_DESCRIPTION);
-		homePage.modifyNote(modifiedNoteTitle, modifiedNoteDescription);
-		homePage.saveNoteChanges(driver);
+		homePage.modifyNote(driver, NOTE_TITLE, NOTE_DESCRIPTION, modifiedNoteTitle, modifiedNoteDescription);
 		homePage.goToTab(driver, 1);
 		Note note = (Note) homePage.popObject(NOTE);
 		Assertions.assertAll(

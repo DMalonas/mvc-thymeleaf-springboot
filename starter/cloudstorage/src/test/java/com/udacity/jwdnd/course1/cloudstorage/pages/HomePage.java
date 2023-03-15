@@ -66,6 +66,8 @@ public class HomePage {
     @FindBy(id = "credential-url")
     private WebElement txtCredentialUrl;
 
+    @FindBy(id = "credentialsUrlId")
+    private WebElement credentialsUrlId;
     @FindBy(id = "nav-files-tab")
     private WebElement navFilesTab;
     @FindBy(id = "credential-username")
@@ -82,8 +84,7 @@ public class HomePage {
     @FindBy(id = "credentialsPasswordId")
     private WebElement credentialsPasswordId;
 
-    @FindBy(id = "credentialsUrlId")
-    private WebElement credentialsUrlId;
+
 
 
     private final JavascriptExecutor js;
@@ -100,12 +101,6 @@ public class HomePage {
         logoutButton.click();
     }
 
-    public void modifyNote(WebDriver webDriver, String title, String description) {
-        String cssSelector = String.format("button[title='%s'][description='%s']", title, description);
-        webDriver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS); // 10 second timeout
-        WebElement editNoteButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(cssSelector)));
-        editNoteButton.click();
-    }
 
     public void deleteNote(WebDriver driver) throws Exception {
         WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -129,11 +124,16 @@ public class HomePage {
         wait.until(ExpectedConditions.elementToBeClickable(addNewNoteButton));
         addNewNoteButton.click();
     }
-    public void modifyNote(String newNoteTitle, String newNoteDescription) {
-        wait.until(ExpectedConditions.elementToBeClickable(noteTitle)).clear();
-        noteTitle.sendKeys(newNoteTitle);
-        wait.until(ExpectedConditions.elementToBeClickable(noteDescription)).clear();
-        noteDescription.sendKeys(newNoteDescription);
+    public void modifyNote(WebDriver driver, String noteTitle, String noteDescription, String newNoteTitle, String newNoteDescription) {
+        String cssSelector = String.format("button[title='%s'][description='%s']", noteTitle, noteDescription);
+        driver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS); // 10 second timeout
+        WebElement editNoteButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(cssSelector)));
+        editNoteButton.click();
+        wait.until(ExpectedConditions.elementToBeClickable(this.noteTitle)).clear();
+        this.noteTitle.sendKeys(newNoteTitle);
+        wait.until(ExpectedConditions.elementToBeClickable(this.noteDescription)).clear();
+        this.noteDescription.sendKeys(newNoteDescription);
+        saveNoteChanges(driver);
     }
 
     public void applyCredentials(String url, String username, String password) {
