@@ -23,7 +23,7 @@ public class CredentialsTests extends BaseTest {
     @Test
     public void credentialsCreateTest() {
         manipulateCredentials(URL, USERNAME, PASSWORD, homePage, true);
-        Assertions.assertTrue(isCredentialDisplayedOnCredentialsPage((Credential) homePage.getFirstObject(CREDENTIAL), URL, USERNAME, PASSWORD));
+        Assertions.assertTrue(isCredentialDisplayedOnCredentialsPage((Credential) homePage.popObject(CREDENTIAL), URL, USERNAME, PASSWORD));
     }
 
     //Write a test that views an existing set of credentials, verifies that the viewable password is unencrypted,
@@ -33,7 +33,7 @@ public class CredentialsTests extends BaseTest {
     public void credentialsManipulationTest() {
         manipulateCredentials(URL, USERNAME, PASSWORD, homePage, true);
         manipulateCredentials(URL + 1, USERNAME + 1, PASSWORD + 1, homePage, false);
-        Credential editedCredentials = (Credential) homePage.getFirstObject(CREDENTIAL);
+        Credential editedCredentials = (Credential) homePage.popObject(CREDENTIAL);
         Assertions.assertEquals(URL + 1, editedCredentials.getUrl());
         Assertions.assertEquals(USERNAME+ 1, editedCredentials.getUserName());
         String modifiedCredentialPassword = editedCredentials.getPassword();
@@ -73,7 +73,7 @@ public class CredentialsTests extends BaseTest {
         if (isNewEntry) {
             homePage.addCredentials();
         } else {
-            homePage.editCredential();
+            homePage.editCredentials();
         }
         homePage.applyCredentials(url, username, password);
         homePage.saveCredentials();

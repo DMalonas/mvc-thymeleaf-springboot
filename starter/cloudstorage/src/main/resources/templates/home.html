@@ -94,7 +94,7 @@
                                         <a id="deleteNoteAnchor" class="btn btn-danger"
                                            th:href="@{/note/delete/{noteId}(noteId = ${note.getNoteId()})}">Delete</a>
                                     </td>
-                                    <th id="tableNoteTitle" scope="row" th:text="${note.getNoteTitle()}">Example Note Title</th>
+                                    <th id="noteTitleId" scope="row" th:text="${note.getNoteTitle()}">Example Note Title</th>
                                     <td id="tableNoteDescription" th:text="${note.getNoteDescription()}">Example Note Description</td>
                                 </tr>
                                 </tbody>
@@ -155,14 +155,14 @@
                                 <tbody>
                                 <tr th:each="credential : ${credentials}">
                                     <td>
-                                        <button type="button" class="btn btn-success" id="btnEditCredential"
+                                        <button type="button" class="btn btn-success" id="editCredentialsButton"
                                                 th:data-id="${credential.getCredentialId()}"
                                                 th:data-url="${credential.getUrl()}"
                                                 th:data-username="${credential.getUserName()}"
                                                 th:data-decryptedPassword = "${encryptionService.decryptValue(credential.password, credential.key)}"
                                                 th:onclick="showCredentialModal(this.getAttribute('data-id'), this.getAttribute('data-url'), this.getAttribute('data-username'), this.getAttribute('data-decryptedPassword'))">
                                             Edit</button>
-                                        <a class="btn btn-danger" id="aDeleteCredential"
+                                        <a class="btn btn-danger" id="deleteCredentialsId"
                                            th:href="@{/credentials/delete/{credentialId}(credentialId = ${credential.getCredentialId()})}">Delete</a>
                                     </td>
                                     <th id="tblCredentialUrl" scope="row" th:text="${credential.getUrl()}">Example Credential URL</th>

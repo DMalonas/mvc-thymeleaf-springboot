@@ -38,7 +38,7 @@ public class NoteTests extends BaseTest {
 	public void displayingExistingNoteTest() {
 		HomePage homePage = getHomePageAndCreateNote();
 		homePage.goToTab(driver, 1);
-		Note note = (Note) homePage.getFirstObject(NOTE);
+		Note note = (Note) homePage.popObject(NOTE);
 		Assertions.assertAll(
 				() -> Assertions.assertEquals(NOTE_TITLE, note.getNoteTitle()),
 				() -> Assertions.assertEquals(NOTE_DESCRIPTION, note.getNoteDescription())
@@ -52,10 +52,10 @@ public class NoteTests extends BaseTest {
 		String modifiedNoteTitle = "My Modified Note";
 		String modifiedNoteDescription = "This is my modified note.";
 		homePage.editNote(driver, NOTE_TITLE, NOTE_DESCRIPTION);
-		homePage.modifyNote(modifiedNoteTitle, modifiedNoteDescription);
+		homePage.editNote(modifiedNoteTitle, modifiedNoteDescription);
 		homePage.saveNoteChanges(driver);
 		homePage.goToTab(driver, 1);
-		Note note = (Note) homePage.getFirstObject(NOTE);
+		Note note = (Note) homePage.popObject(NOTE);
 		Assertions.assertAll(
 				() -> Assertions.assertEquals(modifiedNoteTitle, note.getNoteTitle()),
 				() -> Assertions.assertEquals(modifiedNoteDescription, note.getNoteDescription())
