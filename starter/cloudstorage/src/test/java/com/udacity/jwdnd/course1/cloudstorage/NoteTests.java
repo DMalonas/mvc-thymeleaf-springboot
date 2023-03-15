@@ -4,6 +4,7 @@ import com.udacity.jwdnd.course1.cloudstorage.pages.HomePage;
 import com.udacity.jwdnd.course1.cloudstorage.persistence.Note;
 import com.udacity.jwdnd.course1.cloudstorage.util.BaseTest;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
 import org.springframework.boot.test.context.SpringBootTest;
 import static com.udacity.jwdnd.course1.cloudstorage.util.UtilTests.getHomePage;
 
@@ -31,7 +32,7 @@ public class NoteTests extends BaseTest {
 				break;
 			}
 		}
-		Assertions.assertTrue(homePage.noNotes(driver));
+		Assertions.assertTrue(homePage.areElementsAbsent(driver, "note", By.id("noteTitle"), By.id("noteDescription")));
 	}
 
 	@Test

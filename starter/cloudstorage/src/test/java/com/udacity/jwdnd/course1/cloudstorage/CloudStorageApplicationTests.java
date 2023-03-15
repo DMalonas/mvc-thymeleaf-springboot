@@ -120,17 +120,14 @@ class CloudStorageApplicationTests {
 		// Log in to our dummy account.
 		driver.get("http://localhost:" + this.port + "/login");
 		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
-
 		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inputUsername")));
 		WebElement loginUserName = driver.findElement(By.id("inputUsername"));
 		loginUserName.click();
 		loginUserName.sendKeys(userName);
-
 		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inputPassword")));
 		WebElement loginPassword = driver.findElement(By.id("inputPassword"));
 		loginPassword.click();
 		loginPassword.sendKeys(password);
-
 		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("loginButton")));
 		WebElement loginButton = driver.findElement(By.id("loginButton"));
 		loginButton.click();
@@ -155,7 +152,7 @@ class CloudStorageApplicationTests {
 		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
 
 		// Create a test account
-		doMockSignUp(firstName,lastName,username,password);
+		doMockSignUp(firstName,lastName,username + 1,password);
 		//Go to login page
 		// Attempt to sign up.
 		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-link")));
@@ -163,28 +160,6 @@ class CloudStorageApplicationTests {
 		loginLink.click();
 		// Check if we have been redirected to the log in page.
 		Assertions.assertEquals("http://localhost:" + this.port + "/login", driver.getCurrentUrl());
-
-
-
-
-
-//		driver.get(baseURL + "/signup");
-//
-//		SignUpPage signupPage = new SignUpPage(driver);
-//		signupPage.signup("Peter", "Zastoupil", username, password);
-
-//		driver.get(baseURL + "/login");
-
-//		LoginPage loginPage = new LoginPage(driver);
-//		loginPage.login(username, password);
-
-//		ChatPage chatPage = new ChatPage(driver);
-//		chatPage.sendChatMessage(messageText);
-//
-//		ChatMessage sentMessage = chatPage.getFirstMessage();
-//
-//		assertEquals(username, sentMessage.getUsername());
-//		assertEquals(messageText, sentMessage.getMessageText());
 	}
 
 	/**
@@ -206,7 +181,6 @@ class CloudStorageApplicationTests {
 		doLogIn(username, password);
 		// Try to access a random made-up URL.
 		driver.get("http://localhost:" + this.port + "/some-random-page");
-//		Assertions.assertTrue(driver.getPageSource().contains("Whitelabel Error Page"));
 		Assertions.assertEquals("Home", driver.getTitle());
 	}
 
@@ -226,18 +200,13 @@ class CloudStorageApplicationTests {
 	 */
 	@Test
 	public void testLargeUpload() {
-		// Create a test account
 		doMockSignUp("Large File","Test","LFT","123");
 		doLogIn("LFT", "123");
-
-		// Try to upload an arbitrary large file
 		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
-		String fileName = "5MB.zip";
-
+		String fileName = "20MB.zip";
 		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("fileUpload")));
 		WebElement fileSelectButton = driver.findElement(By.id("fileUpload"));
 		fileSelectButton.sendKeys(new File(fileName).getAbsolutePath());
-
 		WebElement uploadButton = driver.findElement(By.id("uploadButton"));
 		uploadButton.click();
 		try {
@@ -246,7 +215,6 @@ class CloudStorageApplicationTests {
 			System.out.println("Large File upload failed");
 		}
 		Assertions.assertFalse(driver.getPageSource().contains("HTTP Status 403 – Forbidden"));
-
 	}
 
 

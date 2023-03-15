@@ -4,6 +4,7 @@ import com.udacity.jwdnd.course1.cloudstorage.pages.HomePage;
 import com.udacity.jwdnd.course1.cloudstorage.persistence.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.util.BaseTest;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
 import org.springframework.boot.test.context.SpringBootTest;
 import static com.udacity.jwdnd.course1.cloudstorage.util.UtilTests.*;
 
@@ -56,7 +57,7 @@ public class CredentialsTests extends BaseTest {
                 break;
             }
         }
-        Assertions.assertTrue(homePage.noCredentials(driver));
+        Assertions.assertTrue(homePage.areElementsAbsent(driver, "credential", By.id("credentialUsername"), By.id("credentialPassword")));
     }
 
     private boolean isCredentialDisplayedOnCredentialsPage(Credential credential, String url, String username, String password) {

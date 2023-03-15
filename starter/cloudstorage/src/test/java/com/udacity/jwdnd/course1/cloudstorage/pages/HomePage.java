@@ -11,6 +11,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import com.udacity.jwdnd.course1.cloudstorage.persistence.Credential;
+
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class HomePage {
@@ -120,10 +122,6 @@ public void deleteNote(WebDriver driver) throws Exception {
         js.executeScript("arguments[0].click();", deleteCredentialsId);
     }
 
-    public void uploadFile() {
-        js.executeScript("arguments[0].click();", fileUpload);
-    }
-
     public void createNote() {
         wait.until(ExpectedConditions.elementToBeClickable(addNewNoteButton));
         addNewNoteButton.click();
@@ -193,25 +191,22 @@ public void deleteNote(WebDriver driver) throws Exception {
         js.executeScript("arguments[0].click();", btnCredentialSaveChanges);
     }
 
-    public boolean noNotes(WebDriver driver) {
-        return !isElementPresent(By.id("noteTitleId"), driver) && !isElementPresent(By.id("tableNoteDescription"), driver);
-    }
-
-    public boolean noCredentials(WebDriver driver) {
-        return !isElementPresent(By.id("tblCredentialUrl"), driver) &&
-                !isElementPresent(By.id("tblCredentialUsername"), driver) &&
-                !isElementPresent(By.id("tblCredentialPassword"), driver);
-    }
-
-    public boolean isElementPresent(By locatorKey, WebDriver driver) {
-        try {
-            driver.findElement(locatorKey);
-
-            return true;
-        } catch (org.openqa.selenium.NoSuchElementException e) {
-            return false;
+    public boolean areElementsAbsent(WebDriver driver, String elementType, By... locatorKeys) {
+        String xpath = "//table[@id='%s']//td[contains(text(), '%s')]";
+        for (By locatorKey : locatorKeys) {
+            List<WebElement> elements = driver.findElements(locatorKey);
+            for (WebElement element : elements) {
+                String elementText = element.getText();
+                String formattedXpath = String.format(xpath, elementType, elementText);
+                By elementLocator = By.xpath(formattedXpath);
+                if (driver.findElements(elementLocator).size() > 0) {
+                    return false;
+                }
+            }
         }
+        return true;
     }
+
 
     public Object popObject(String objectType) {
         if (objectType.equalsIgnoreCase("note")) {
