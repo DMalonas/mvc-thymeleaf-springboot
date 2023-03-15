@@ -34,7 +34,6 @@ public class EncryptionService {
 
     public String decryptValue(String data, String key) {
         byte[] decryptedValue = null;
-
         try {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             SecretKey secretKey = new SecretKeySpec(key.getBytes(), "AES");
@@ -44,7 +43,6 @@ public class EncryptionService {
                 | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             logger.error(e.getMessage());
         }
-
         return new String(decryptedValue);
     }
 }
