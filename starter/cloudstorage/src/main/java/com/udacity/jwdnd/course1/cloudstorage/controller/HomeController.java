@@ -5,14 +5,11 @@ import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.UserMapper;
 import com.udacity.jwdnd.course1.cloudstorage.persistence.CredentialsForm;
 import com.udacity.jwdnd.course1.cloudstorage.services.UtilService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class HomeController {
@@ -35,7 +32,7 @@ public class HomeController {
             if (notLoggedInYet) {
                 return "login";
             }
-            utilService.updateModel(model);
+            utilService.updateModel(model, true);
             return "home";
         } catch (Exception e) {
             e.printStackTrace();

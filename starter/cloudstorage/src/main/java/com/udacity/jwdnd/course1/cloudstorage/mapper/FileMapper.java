@@ -1,7 +1,10 @@
 package com.udacity.jwdnd.course1.cloudstorage.mapper;
 
+import com.udacity.jwdnd.course1.cloudstorage.services.UtilService;
 import org.apache.ibatis.annotations.*;
 import  com.udacity.jwdnd.course1.cloudstorage.persistence.File;
+import org.springframework.ui.Model;
+
 import java.util.List;
 
 @Mapper
@@ -43,12 +46,18 @@ public interface FileMapper {
     @Delete("DELETE FROM FILES WHERE fileName = #{fileName}")
     int deleteFileByFileName(String fileName);
 
-    default int deleteEntrySafely(String fileName) {
+    default void deleteEntrySafely(String fileName, Model model, UtilService utilService) {
         int count = selectCountByFileName(fileName);
         if (count > 0) {
-            return deleteFileByFileName(fileName);
+            if (deleteFileByFileName(fileName) < 0) {
+                model.addAttribute("message", "File deletion failed");
+                utilService.updateModel(model, false);
+            } else {
+                utilService.updateModel(model, true);
+            }
         } else {
-            return 0;
+            model.addAttribute("message", "File doesn't exist");
+            utilService.updateModel(model, false);
         }
     }
 

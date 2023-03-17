@@ -3,7 +3,6 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 import com.udacity.jwdnd.course1.cloudstorage.persistence.*;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UtilService;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,7 @@ public class NoteController {
 
     @GetMapping
     public String getHomePage(@ModelAttribute("newCredential") CredentialsForm newCredential,Model model) {
-        utilService.updateModel(model);
+        utilService.updateModel(model, true);
         return "home";
     }
 
@@ -35,7 +34,7 @@ public class NoteController {
         } else {
             noteService.updateNote(noteForm.getNoteId(), noteForm.getTitle(), noteForm.getDescription());
         }
-        utilService.updateModel(model);
+        utilService.updateModel(model, true);
         return "home";
     }
 
@@ -44,7 +43,7 @@ public class NoteController {
     public String delete(@ModelAttribute("newCredential") CredentialsForm newCredential,@PathVariable String noteId,
             Model model) {
         noteService.deleteNote(Integer.parseInt(noteId));
-        utilService.updateModel(model);
+        utilService.updateModel(model, true);
         return "home";
     }
 }

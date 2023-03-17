@@ -3,6 +3,7 @@ package com.udacity.jwdnd.course1.cloudstorage.services;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.CredentialsMapper;
 import com.udacity.jwdnd.course1.cloudstorage.persistence.Credential;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.List;
 
@@ -16,9 +17,9 @@ public class CredentialsService {
         this.credentialsMapper = credentialsMapper;
     }
 
-    public void addCredentials(String url, String credentialUserName, String password) {
+    public int addCredentials(String url, String credentialUserName, String password) {
         List<String> encryptedData = utilService.getEncryptedData(password);
-        credentialsMapper.insert(new Credential(url, credentialUserName, encryptedData.get(0), encryptedData.get(1), utilService.getUserId()));
+        return credentialsMapper.insert(new Credential(url, credentialUserName, encryptedData.get(0), encryptedData.get(1), utilService.getUserId()));
     }
 
     public Credential getCredential(Integer credentialId) {
@@ -29,12 +30,16 @@ public class CredentialsService {
         return credentialsMapper.getCredentialsByUserId(id);
     }
 
-    public void deleteCredential(Integer noteId) {
-        credentialsMapper.deleteCredential(noteId);
+    public void deleteCredential(Integer noteId, Model model) {
+        if (credentialsMapper.deleteCredential(noteId) > 0) {
+            utilService.updateModel(model, true);
+        } else {
+            utilService.updateModel(model, true);
+        }
     }
 
-    public void updateCredential(Integer credentialId, String newUserName, String url, String password) {
+    public int updateCredential(Integer credentialId, String newUserName, String url, String password) {
         List<String> encryptedData = utilService.getEncryptedData(password);
-        credentialsMapper.updateCredential(credentialId, newUserName, url, encryptedData.get(0), encryptedData.get(1));
+        return credentialsMapper.updateCredential(credentialId, newUserName, url, encryptedData.get(0), encryptedData.get(1));
     }
 }

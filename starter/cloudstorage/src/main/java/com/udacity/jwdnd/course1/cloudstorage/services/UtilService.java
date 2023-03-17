@@ -54,7 +54,12 @@ public class UtilService {
         return authentication.getName();
     }
 
-    public void updateModel(Model model) {
+     public void updateModel(Model model, boolean operationResult) {
+        if (operationResult) {
+            model.addAttribute("result","success");
+        } else {
+            model.addAttribute("result","error");
+        }
         Integer userId = getUserId();
         model.addAttribute("newNote", new NoteForm());
         model.addAttribute("files", fileMapper.getFilesByUserId(userId).isEmpty() ? new String[0] : fileMapper.getFilesByUserId(userId).toArray(new String[0]));

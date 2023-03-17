@@ -1,13 +1,13 @@
 package com.udacity.jwdnd.course1.cloudstorage.services;
 
 
+import com.udacity.jwdnd.course1.cloudstorage.controller.enums.View;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.UserMapper;
 import com.udacity.jwdnd.course1.cloudstorage.persistence.File;
-import com.udacity.jwdnd.course1.cloudstorage.persistence.User;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -28,28 +28,33 @@ public class FileService {
     }
 
 
-    public int addFile(MultipartFile multipartFile, Model model) throws IOException {
+    public void addFile(MultipartFile multipartFile, Model model) throws IOException {
         Integer userId = utilService.getUserId();
         String fileName = multipartFile.getOriginalFilename();
-        if (!fileIsDuplicate(userId, fileName)) {
+        if (multipartFile.isEmpty()) {
+            model.addAttribute("message", "No file selected");
+            utilService.updateModel(model, false);
+        } else if (!fileIsDuplicate(userId, fileName)) {
             try {
                 byte[] fileData = multipartFile.getBytes();
                 String contentType = multipartFile.getContentType();
                 String fileSize = String.valueOf(multipartFile.getSize());
                 File file = new File(fileName, contentType, fileSize, (long)userId, fileData);
-                int id = fileMapper.insertFile(file);
-                utilService.updateModel(model);
-                return id;
+                fileMapper.insertFile(file);
+                utilService.updateModel(model, true);
             } catch (IOException e) {
                 e.printStackTrace();
-                model.addAttribute("error", "Exception occurred while trying to save file.");
-                utilService.updateModel(model);
-                return -1;
+                model.addAttribute("message", "Exception occurred while trying to save file.");
+                utilService.updateModel(model, false);
+            } catch (MaxUploadSizeExceededException e) {
+                e.printStackTrace();
+                model.addAttribute("message", "File size limit exceeded.");
+                utilService.updateModel(model, false);
             }
+        } else {
+            model.addAttribute("message", "You tried to add a duplicate file");
+            utilService.updateModel(model, false);
         }
-        model.addAttribute("error", "You have tried to add a duplicate file.");
-        utilService.updateModel(model);
-        return -1;
     }
 
     private boolean fileIsDuplicate(Integer userId, String fileName) {
@@ -67,9 +72,7 @@ public class FileService {
     }
 
     public void deleteFile(String fileName, Model model) {
-        Integer userId = utilService.getUserId();
-        fileMapper.deleteEntrySafely(fileName);
-        utilService.updateModel(model);
+        fileMapper.deleteEntrySafely(fileName, model, this.utilService);
     }
 }
 

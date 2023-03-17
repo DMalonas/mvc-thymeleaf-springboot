@@ -20,7 +20,8 @@ public interface NoteMapper {
     Note getNote(Integer noteId);
 
     @Delete("DELETE FROM NOTES WHERE noteid = #{noteId}")
-    void deleteNote(Integer noteId);
+    @Options(useGeneratedKeys = true, keyProperty = "noteId")
+    int deleteNote(Integer noteId);
 
     @Update("UPDATE NOTES SET notetitle = #{title}, notedescription = #{description} WHERE noteid = #{noteId}")
     void updateNote(Integer noteId, String title, String description);

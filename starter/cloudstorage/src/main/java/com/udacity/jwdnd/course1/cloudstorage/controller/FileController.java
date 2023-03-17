@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.controller.enums.View;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
 import com.udacity.jwdnd.course1.cloudstorage.persistence.CredentialsForm;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
@@ -36,22 +37,16 @@ public class FileController {
 
     @GetMapping("/upload")
     public String showUploadForm() {
-        return "upload";
+        return View.UPLOAD.getText();
     }
 
     @PostMapping("/upload")
     public String handleFileUpload(@ModelAttribute("newCredential") CredentialsForm newCredential, @RequestParam("fileUpload") MultipartFile file,
                                    Model model) throws IOException {
-        try {
+
             fileService.addFile(file, model);
-            utilService.updateModel(model);
-            return "home";
-        } catch (MaxUploadSizeExceededException e) {
-            e.printStackTrace();
-            model.addAttribute("error", "File size limit exceeded.");
-            utilService.updateModel(model);
-            return "home";
-        }
+            return View.RESULT.getText();
+
     }
 
 
@@ -71,8 +66,8 @@ public class FileController {
     @GetMapping(value = "/delete/{fileName}")
     public String deleteFile(@ModelAttribute("newCredential") CredentialsForm newCredential,@PathVariable String fileName, Model model) {
         fileService.deleteFile(fileName, model);
-        utilService.updateModel(model);
-        return "home";
+        utilService.updateModel(model, true);
+        return View.RESULT.getText();
     }
 
 }
