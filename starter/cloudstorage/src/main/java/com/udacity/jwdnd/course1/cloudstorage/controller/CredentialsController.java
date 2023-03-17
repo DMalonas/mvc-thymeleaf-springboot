@@ -26,18 +26,6 @@ public class CredentialsController {
         utilService.updateModel(model);
         return "home";
     }
-//
-//    @GetMapping("/credentials")
-//    public String getCredentials(Model model, @ModelAttribute("credential") CredentialsForm credentials) {
-//        // Create a new empty credential object
-//        Credential credential = new Credential();
-//        utilService.updateModel(model);
-//        // Add the credential object to the model attribute
-//        model.addAttribute("credential", credential);
-//
-//        // Add other necessary model attributes
-//        return "home";
-//    }
 
 
     @PostMapping
