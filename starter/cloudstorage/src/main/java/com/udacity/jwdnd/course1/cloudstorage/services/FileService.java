@@ -41,6 +41,7 @@ public class FileService {
                 String fileSize = String.valueOf(multipartFile.getSize());
                 File file = new File(fileName, contentType, fileSize, (long)userId, fileData);
                 fileMapper.insertFile(file);
+                model.addAttribute("message", "File successfully saved. ");
                 utilService.updateModel(model, true);
             } catch (IOException e) {
                 e.printStackTrace();

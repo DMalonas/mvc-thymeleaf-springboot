@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.controller.enums.View;
 import com.udacity.jwdnd.course1.cloudstorage.persistence.*;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UtilService;
@@ -22,7 +23,7 @@ public class NoteController {
     @GetMapping
     public String getHomePage(@ModelAttribute("newCredential") CredentialsForm newCredential,Model model) {
         utilService.updateModel(model, true);
-        return "home";
+        return View.HOME.getText();
     }
 
 
@@ -30,20 +31,18 @@ public class NoteController {
     @PostMapping
     public String addNote(@ModelAttribute("newCredential") CredentialsForm newCredential,@ModelAttribute("note") NoteForm noteForm, Model model) {
         if (noteForm.getNoteId().isBlank()) {
-            noteService.addNote(noteForm.getTitle(), noteForm.getDescription());
+            noteService.addNote(noteForm.getTitle(), noteForm.getDescription(), model);
         } else {
-            noteService.updateNote(noteForm.getNoteId(), noteForm.getTitle(), noteForm.getDescription());
+            noteService.updateNote(noteForm.getNoteId(), noteForm.getTitle(), noteForm.getDescription(), model);
         }
-        utilService.updateModel(model, true);
-        return "home";
+        return View.RESULT.getText();
     }
 
 
     @GetMapping(value = "/delete/{noteId}")
     public String delete(@ModelAttribute("newCredential") CredentialsForm newCredential,@PathVariable String noteId,
             Model model) {
-        noteService.deleteNote(Integer.parseInt(noteId));
-        utilService.updateModel(model, true);
-        return "home";
+        noteService.deleteNote(Integer.parseInt(noteId), model);
+        return View.RESULT.getText();
     }
 }

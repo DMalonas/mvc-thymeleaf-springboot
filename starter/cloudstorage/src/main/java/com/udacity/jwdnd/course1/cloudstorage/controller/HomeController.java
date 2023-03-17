@@ -1,6 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 
+import com.udacity.jwdnd.course1.cloudstorage.controller.enums.View;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.UserMapper;
 import com.udacity.jwdnd.course1.cloudstorage.persistence.CredentialsForm;
@@ -30,15 +31,15 @@ public class HomeController {
         try {
             boolean notLoggedInYet = utilService.getUserId() == -1;
             if (notLoggedInYet) {
-                return "login";
+                return View.LOGIN.getText();
             }
             utilService.updateModel(model, true);
-            return "home";
+            return View.HOME.getText();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return "login";
+        return View.LOGIN.getText();
     }
 
 

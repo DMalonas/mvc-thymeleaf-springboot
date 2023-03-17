@@ -15,8 +15,11 @@
     </h1>
     <div class="alert fill-parent" th:classappend="${result == 'success'} ? 'alert-success' : 'alert-danger'">
             <span th:switch="${result}">
-                <span th:case="'success'">Changes successfully saved. Click <a href="/home" id="aResultSuccess">here</a> to continue.</span>
-                <span th:case="'notSaved'">Changes not saved. Click <a>here</a> to continue.</span>
+                <span th:case="'success'">
+                    <span th:text="${message}">Success </span>
+                    <span>Click <a href="/home" id="aResultSuccess">here</a> to continue.</span>
+                </span>
+                <span th:case="'notSaved'" th:text="${message}">Changes not saved. Click <a>here</a> to continue.</span>
                 <span th:case="'error'">
                     <span th:text="${message}">Error </span>
                     <span>Click <a href="/home" id="aResultFailure">here</a> to continue.</span>

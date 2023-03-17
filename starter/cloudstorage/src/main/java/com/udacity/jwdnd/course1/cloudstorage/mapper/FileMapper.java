@@ -53,6 +53,7 @@ public interface FileMapper {
                 model.addAttribute("message", "File deletion failed");
                 utilService.updateModel(model, false);
             } else {
+                model.addAttribute("message", "File deleted");
                 utilService.updateModel(model, true);
             }
         } else {

@@ -40,7 +40,14 @@ public class CredentialsController {
             operationResult = credentialsService.updateCredential(savedCredential.getCredentialId(), credentials.getUserName(), credentials.getUrl(),
                     credentials.getPassword());
         }
-        utilService.updateModel(model, (operationResult > 0) ? true : false);
+        if ((operationResult > 0)) {
+            model.addAttribute("message", "Credentials list updated");
+            utilService.updateModel(model,  true);
+
+        } else {
+            model.addAttribute("message", "Could not update credentials list");
+            utilService.updateModel(model,  true);
+        }
         model.addAttribute("credentials", credentialsService.getCredentials(utilService.getUserId()));
         return View.RESULT.getText();
     }
