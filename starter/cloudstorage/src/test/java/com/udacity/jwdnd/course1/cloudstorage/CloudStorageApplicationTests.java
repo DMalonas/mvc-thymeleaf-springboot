@@ -155,9 +155,9 @@ class CloudStorageApplicationTests {
 		doMockSignUp(firstName,lastName,username + 1,password);
 		//Go to login page
 		// Attempt to sign up.
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-link")));
-		WebElement loginLink = driver.findElement(By.id("login-link"));
-		loginLink.click();
+//		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-link")));
+//		WebElement loginLink = driver.findElement(By.id("login-link"));
+//		loginLink.click();
 		// Check if we have been redirected to the log in page.
 		Assertions.assertEquals("http://localhost:" + this.port + "/login", driver.getCurrentUrl());
 	}

@@ -52,6 +52,7 @@ public class NoteTests extends BaseTest {
 		HomePage homePage = getHomePageAndCreateNote();
 		String modifiedNoteTitle = "My Modified Note";
 		String modifiedNoteDescription = "This is my modified note.";
+		homePage.goToTab(driver, 1);
 		homePage.modifyNote(driver, NOTE_TITLE, NOTE_DESCRIPTION, modifiedNoteTitle, modifiedNoteDescription);
 		homePage.goToTab(driver, 1);
 		Note note = (Note) homePage.popObject(NOTE);
@@ -68,7 +69,7 @@ public class NoteTests extends BaseTest {
 		homePage.setNoteTitle(NOTE_TITLE, driver);
 		homePage.setNoteDescription(NOTE_DESCRIPTION, driver);
 		homePage.saveNoteChanges(driver);
-		homePage.goToTab(driver, 1);
+		homePage.goToTab(driver, 3);
 		return homePage;
 	}
 }

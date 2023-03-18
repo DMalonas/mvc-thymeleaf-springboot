@@ -24,6 +24,7 @@ public class CredentialsTests extends BaseTest {
     @Test
     public void credentialsCreateTest() {
         manipulateCredentials(URL, USERNAME, PASSWORD, homePage, true);
+        homePage.goToTab(driver, 2);
         Assertions.assertTrue(isCredentialDisplayedOnCredentialsPage((Credential) homePage.popObject(CREDENTIAL), URL, USERNAME, PASSWORD));
     }
 
@@ -40,6 +41,7 @@ public class CredentialsTests extends BaseTest {
         String modifiedCredentialPassword = editedCredentials.getPassword();
         Assertions.assertNotEquals(PASSWORD+ 1, modifiedCredentialPassword);
         homePage.deleteCredentials();
+        homePage.goToTab(driver, 3);
         homePage.logout();
     }
 
@@ -73,11 +75,17 @@ public class CredentialsTests extends BaseTest {
     private void manipulateCredentials(String url, String username, String password, HomePage homePage, boolean isNewEntry) {
         if (isNewEntry) {
             homePage.addCredentials();
+            applySaveAndGoToTabCredentialsMethod(url, username, password, homePage, 3);
         } else {
             homePage.editCredentials();
+            applySaveAndGoToTabCredentialsMethod(url, username, password, homePage, 2);
         }
+
+    }
+
+    private static void applySaveAndGoToTabCredentialsMethod(String url, String username, String password, HomePage homePage, int tabToGoTo) {
         homePage.applyCredentials(url, username, password);
         homePage.saveCredentials();
-        homePage.goToTab(driver, 2);
+        homePage.goToTab(driver, tabToGoTo);
     }
 }

@@ -85,7 +85,8 @@ public class HomePage {
     private WebElement credentialsPasswordId;
 
 
-
+    @FindBy(id = "operationIsSuccessful")
+    private WebElement successPageClickHyperLink;
 
     private final JavascriptExecutor js;
 
@@ -151,6 +152,8 @@ public class HomePage {
             tabToGoTo = wait.until(ExpectedConditions.elementToBeClickable(navNotesTab));
         }  else if (tab == 2) {
             tabToGoTo = wait.until(ExpectedConditions.elementToBeClickable(navCredentialsTab));
+        } else if (tab == 3) {
+            tabToGoTo = wait.until(ExpectedConditions.elementToBeClickable(successPageClickHyperLink));
         }
         tabToGoTo.click();
     }

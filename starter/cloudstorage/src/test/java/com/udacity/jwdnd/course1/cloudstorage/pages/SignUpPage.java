@@ -22,9 +22,6 @@ public class SignUpPage {
     @FindBy(id = "inputPassword")
     private WebElement inputPassword;
 
-
-
-
     @FindBy(id = "buttonSignUp")
     private WebElement buttonSignUp;
 
@@ -55,9 +52,6 @@ public class SignUpPage {
 
         wait.until(ExpectedConditions.elementToBeClickable(this.buttonSignUp)); // Wait for button to be clickable
         this.buttonSignUp.click();
-
-        wait.until(ExpectedConditions.elementToBeClickable(this.signUpToLoginPage)); // Wait for link to be clickable
-        this.signUpToLoginPage.click();
     }
 
 
