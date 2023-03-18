@@ -17,7 +17,7 @@
             <span th:switch="${result}">
                 <span th:case="'success'">
                     <span th:text="${message}">Success </span>
-                    <span>Click <a href="/home" id="aResultSuccess">here</a> to continue.</span>
+                    <span>Click <a href="/home" id="operationIsSuccessful">here</a> to continue.</span>
                 </span>
                 <span th:case="'notSaved'" th:text="${message}">Changes not saved. Click <a>here</a> to continue.</span>
                 <span th:case="'error'">
